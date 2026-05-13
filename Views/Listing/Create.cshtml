@@ -1,0 +1,69 @@
+﻿@using TradeNest.Models
+
+@{
+    List<Category> categories = ViewBag.Categories;
+}
+
+<h1>Dodawanie ogłoszenia</h1>
+
+<form method="post">
+
+    <div>
+        <label>Tytuł</label>
+        <input type="text" name="title" />
+    </div>
+
+    <div>
+        <label>Opis</label>
+        <textarea name="description"></textarea>
+    </div>
+
+    <div>
+        <label>Cena</label>
+        <input type="number" step="0.01" name="price" />
+    </div>
+
+    <div>
+        <label>Kategoria</label>
+
+        <select name="categoryId" id="categorySelect" onchange="loadParameters()">
+
+            <option value="">
+                Wybierz kategorię
+            </option>
+
+            @foreach (Category category in categories)
+            {
+                <option value="@category.Id">
+                    @category.Name
+                </option>
+            }
+
+        </select>
+    </div>
+
+    <hr />
+
+    <div id="parameters">
+    </div>
+
+    <button type="submit">
+        Dodaj ogłoszenie
+    </button>
+
+</form>
+
+<script>
+
+    async function loadParameters()
+    {
+        const categoryId = document.getElementById("categorySelect").value;
+
+        const response = await fetch(`/Listing/GetCategoryParameters?categoryId=${categoryId}`);
+
+        const html = await response.text();
+
+        document.getElementById("parameters").innerHTML = html;
+    }
+
+</script>

@@ -1,0 +1,33 @@
+﻿@model List<TradeNest.Models.CategoryParameter>
+
+@for (int i = 0; i < Model.Count; i++)
+{
+    <div>
+        <label>
+            @Model[i].Name
+        </label>
+
+        <input type="hidden" name="parameters[@i].Id" value="@Model[i].Id" />
+
+        @if (Model[i].Type == TradeNest.Models.ParameterType.Text)
+        {
+            <input type="text" name="parameters[@i].Value" />
+        }
+
+        @if (Model[i].Type == TradeNest.Models.ParameterType.Number)
+        {
+            <input type="number" name="parameters[@i].Value" />
+        }
+
+        @if (Model[i].Type == TradeNest.Models.ParameterType.Date)
+        {
+            <input type="date" name="parameters[@i].Value" />
+        }
+
+        @if (Model[i].Type == TradeNest.Models.ParameterType.Boolean)
+        {
+            <input type="checkbox" name="parameters[@i].Value" value="true" />
+            <input type="hidden" name="parameters[@i].Value" value="false" />
+        }
+    </div>
+}

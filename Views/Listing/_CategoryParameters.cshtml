@@ -1,0 +1,35 @@
+﻿@model List<TradeNest.Models.CategoryParameter>
+
+@foreach (TradeNest.Models.CategoryParameter parameter in Model)
+{
+    <div>
+
+        <label>
+            @parameter.Name
+        </label>
+
+        <input type="hidden" name="parameterIds" value="@parameter.Id" />
+
+        @if (parameter.Type == TradeNest.Models.ParameterType.Text)
+        {
+            <input type="text" name="parameterValues" />
+        }
+
+        @if (parameter.Type == TradeNest.Models.ParameterType.Number)
+        {
+            <input type="number" name="parameterValues" />
+        }
+
+        @if (parameter.Type == TradeNest.Models.ParameterType.Boolean)
+        {
+            <input type="hidden" name="parameterValues" value="false" />
+            <input type="checkbox" name="parameterValues" value="true" />
+        }
+
+        @if (parameter.Type == TradeNest.Models.ParameterType.Date)
+        {
+            <input type="date" name="parameterValues" />
+        }
+
+    </div>
+}

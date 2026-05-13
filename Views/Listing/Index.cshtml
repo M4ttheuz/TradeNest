@@ -1,0 +1,73 @@
+﻿@model List<TradeNest.Models.Listing>
+
+<h1>Ogłoszenia</h1>
+
+<a href="/Listing/Create">
+    Dodaj ogłoszenie
+</a>
+
+<hr />
+
+@foreach (TradeNest.Models.Listing listing in Model)
+{
+    <div>
+
+        <h2>
+            @listing.Title
+        </h2>
+
+        <div>
+            @listing.Description
+        </div>
+
+        <div>
+            Kategoria: @listing.Category.Name
+        </div>
+
+        <div>
+            Cena:
+            @(listing.Prices
+                    .OrderByDescending(x => x.SetAt)
+                    .FirstOrDefault()?.Price)
+        </div>
+
+        <div>
+            Dodano:
+            @listing.CreatedAt
+        </div>
+
+        @if (listing.UpdatedAt != listing.CreatedAt)
+        {
+            <div>
+                (Edytowano: @listing.UpdatedAt)
+            </div>
+        }
+
+        <h4>Parametry</h4>
+
+        @foreach (TradeNest.Models.ListingParameterValue parameter in listing.ParameterValues)
+        {
+            <div>
+                @parameter.CategoryParameter.Name:
+                @parameter.Value
+            </div>
+        }
+
+        <form method="post" action="/Listing/Delete">
+
+            <input type="hidden" name="id" value="@listing.Id" />
+
+            <button type="submit">
+                Usuń
+            </button>
+
+        </form>
+
+        <a href="/Listing/Edit/@listing.Id">
+            Edytuj
+        </a>
+
+        <hr />
+
+    </div>
+}

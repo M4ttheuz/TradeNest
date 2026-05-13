@@ -1,0 +1,78 @@
+﻿@using TradeNest.Models
+
+<h1>Tworzenie kategorii</h1>
+
+<form method="post">
+
+    <div>
+        <label>Nazwa kategorii</label>
+        <input type="text" name="categoryName" />
+    </div>
+
+    <hr />
+
+    <h3>Parametry</h3>
+
+    <div id="parameters">
+    </div>
+
+    <button type="button" onclick="addParameter()">
+        Dodaj parametr
+    </button>
+
+    <button type="submit">
+        Utwórz kategorię
+    </button>
+
+</form>
+
+<script>
+
+    function addParameter()
+    {
+        const container = document.getElementById("parameters");
+
+        const parameter = document.createElement("div");
+
+        parameter.innerHTML = `
+            <hr />
+
+            <div>
+                <label>Nazwa parametru</label>
+                <input type="text" name="parameterNames" />
+            </div>
+
+            <div>
+                <label>Typ</label>
+
+                <select name="parameterTypes">
+                    <option value="0">Text</option>
+                    <option value="1">Number</option>
+                    <option value="2">Boolean</option>
+                    <option value="3">Date</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Wymagany</label>
+
+                <input type="hidden" name="parameterRequired" value="false" />
+                <input type="checkbox" name="parameterRequired" value="true" />
+            </div>
+
+            <button type="button" onclick="removeParameter(this)">
+                Usuń parametr
+            </button>
+        `;
+
+        container.appendChild(parameter);
+    }
+
+    function removeParameter(button)
+    {
+        button.parentElement.remove();
+    }
+
+    addParameter();
+
+</script>

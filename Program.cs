@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TradeNest.Data;
+using TradeNest.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,5 +29,27 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    context.Database.EnsureCreated();
+
+    if (!context.Users.Any())
+    {
+        User user = new()
+        {
+            Username = "test",
+            Password = "test",
+            Role = "Admin",
+            IsActive = true
+        };
+
+        context.Users.Add(user);
+
+        context.SaveChanges();
+    }
+}
 
 app.Run();

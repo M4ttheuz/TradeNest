@@ -1,4 +1,5 @@
-﻿namespace TradeNest.Models
+using System.ComponentModel.DataAnnotations.Schema;
+namespace TradeNest.Models
 {
     public class User
     {

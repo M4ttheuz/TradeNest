@@ -1,44 +1,119 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TradeNest</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TradeNest.styles.css" asp-append-version="true" />
+    <style>
+        .navbar {
+            background-color: var(--surface-color) !important;
+            border-bottom: 1px solid #333 !important;
+        }
+        .navbar-brand, .nav-link, .navbar-brand:hover, .nav-link:hover {
+            color: var(--text-primary) !important;
+        }
+        
+        .search-bar-group .form-select {
+            background-color: var(--surface-color);
+            color: var(--text-primary);
+            border-color: #444;
+            max-width: 150px;
+        }
+        .search-bar-group .form-control {
+            background-color: var(--surface-color);
+            color: var(--text-primary);
+            border-color: #444;
+        }
+        .search-bar-group .form-control::placeholder {
+            color: var(--text-secondary);
+        }
+        .search-bar-group .btn {
+            background-color: var(--surface-color);
+            border-color: #444;
+            color: var(--text-primary);
+        }
+        .search-bar-group .btn:hover {
+            background-color: #333;
+            color: var(--primary-color);
+        }
+        
+        footer {
+            background-color: var(--surface-color);
+            color: var(--text-secondary) !important;
+            border-top: 1px solid #333 !important;
+        }
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TradeNest</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        <nav class="navbar navbar-expand-lg py-3">
+            <div class="container-fluid container-xl">
+                <a class="navbar-brand fw-bold fs-4" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-shop me-2" style="color: var(--primary-color);"></i>TradeNest
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Przełącz nawigację">
+                    <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <form class="d-flex mx-auto search-bar-group my-2 my-lg-0 w-100" style="max-width: 500px;">
+                        <div class="input-group">
+                            <select class="form-select border-end-0 form-select-dark">
+                                <option selected>Wszystkie</option>
+                                <option value="1">Motoryzacja</option>
+                                <option value="2">Elektronika</option>
+                                <option value="3">Moda</option>
+                            </select>
+                            <input class="form-control form-control-dark" type="search" placeholder="Czego szukasz?" aria-label="Szukaj">
+                            <button class="btn" type="submit"><i class="bi bi-search"></i></button>
+                        </div>
+                    </form>
+                    
+                    <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0 justify-content-center">
+                        <button class="icon-btn" title="Wiadomości">
+                            <i class="bi bi-chat-dots"></i>
+                        </button>
+                        <button class="icon-btn" title="Powiadomienia">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge rounded-pill badge-notification">3</span>
+                        </button>
+                        <button class="icon-btn" title="Obserwowane">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                        <a href="#" class="btn btn-primary-custom ms-2 rounded-pill px-4 py-2">Dodaj Ogłoszenie</a>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container content-container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - TradeNest - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="py-4 mt-5">
+        <div class="container text-center text-md-start">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5 class="fw-bold text-light">TradeNest</h5>
+                    <p class="mb-0">Twój ulubiony ryneczek.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    &copy; 2026 - TradeNest - <a asp-area="" asp-controller="Home" asp-action="Privacy">Polityka Prywatności</a>
+                </div>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

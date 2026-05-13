@@ -1,35 +1,33 @@
 ﻿@model List<TradeNest.Models.CategoryParameter>
 
-@foreach (TradeNest.Models.CategoryParameter parameter in Model)
+@for (int i = 0; i < Model.Count; i++)
 {
     <div>
-
         <label>
-            @parameter.Name
+            @Model[i].Name
         </label>
 
-        <input type="hidden" name="parameterIds" value="@parameter.Id" />
+        <input type="hidden" name="parameters[@i].Id" value="@Model[i].Id" />
 
-        @if (parameter.Type == TradeNest.Models.ParameterType.Text)
+        @if (Model[i].Type == TradeNest.Models.ParameterType.Text)
         {
-            <input type="text" name="parameterValues" />
+            <input type="text" name="parameters[@i].Value" />
         }
 
-        @if (parameter.Type == TradeNest.Models.ParameterType.Number)
+        @if (Model[i].Type == TradeNest.Models.ParameterType.Number)
         {
-            <input type="number" name="parameterValues" />
+            <input type="number" name="parameters[@i].Value" />
         }
 
-        @if (parameter.Type == TradeNest.Models.ParameterType.Boolean)
+        @if (Model[i].Type == TradeNest.Models.ParameterType.Date)
         {
-            <input type="hidden" name="parameterValues" value="false" />
-            <input type="checkbox" name="parameterValues" value="true" />
+            <input type="date" name="parameters[@i].Value" />
         }
 
-        @if (parameter.Type == TradeNest.Models.ParameterType.Date)
+        @if (Model[i].Type == TradeNest.Models.ParameterType.Boolean)
         {
-            <input type="date" name="parameterValues" />
+            <input type="checkbox" name="parameters[@i].Value" value="true" />
+            <input type="hidden" name="parameters[@i].Value" value="false" />
         }
-
     </div>
 }

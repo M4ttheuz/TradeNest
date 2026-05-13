@@ -38,8 +38,7 @@ namespace TradeNest.Controllers
             string description,
             double price,
             int categoryId,
-            List<int> parameterIds,
-            List<string> parameterValues)
+            List<ParameterInputModel> parameters)
         {
             Listing listing = new()
             {
@@ -62,12 +61,12 @@ namespace TradeNest.Controllers
                 SetAt = DateTime.Now
             });
 
-            for (int i = 0; i < parameterIds.Count; i++)
+            foreach (var p in parameters)
             {
                 listing.ParameterValues.Add(new ListingParameterValue
                 {
-                    CategoryParameterId = parameterIds[i],
-                    Value = parameterValues[i]
+                    CategoryParameterId = p.Id,
+                    Value = p.Value
                 });
             }
 

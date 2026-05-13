@@ -53,19 +53,14 @@
             </div>
         }
 
-        <form method="post" action="/Listing/Delete">
-
+        <form method="post" action="/Listing/Delete" style="display:inline;">
             <input type="hidden" name="id" value="@listing.Id" />
-
-            <button type="submit">
-                Usuń
-            </button>
-
+            <button type="submit">Usuń</button>
         </form>
 
-        <a href="/Listing/Edit/@listing.Id">
-            Edytuj
-        </a>
+        <form method="get" action="/Listing/Edit/@listing.Id" style="display:inline;">
+            <button type="submit">Edytuj</button>
+        </form>
 
         <hr />
 

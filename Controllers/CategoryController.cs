@@ -20,7 +20,10 @@ namespace TradeNest.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(string categoryName, List<string> parameterNames, List<ParameterType> parameterTypes, List<bool> parameterRequired)
+        public IActionResult Create(string categoryName, 
+            List<string> parameterNames, 
+            List<ParameterType> parameterTypes, 
+            List<bool> parameterRequired)
         {
             Category category = new()
             {

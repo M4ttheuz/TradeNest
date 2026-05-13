@@ -1,5 +1,22 @@
+:root {
+    --bg-color: #121212;
+    --surface-color: #1E1E1E;
+    --primary-color: #BB86FC;
+    --secondary-color: #03DAC6;
+    --text-primary: #E1E1E1;
+    --text-secondary: #A0A0A0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    margin-bottom: 60px;
+}
+
 html {
   font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,15 +25,303 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/*Przyciski, proba podzialu na razie :)*/
+
+.btn-primary-custom {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #121212 !important;
+    font-weight: 600 !important;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.btn-primary-custom:hover {
+    background-color: #9b68e6 !important;
+    border-color: #9b68e6 !important;
+    color: #121212 !important;
 }
 
-body {
-  margin-bottom: 60px;
+.btn-secondary-custom {
+    background-color: transparent !important;
+    border: 1px solid var(--text-secondary) !important;
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+}
+
+.btn-secondary-custom:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.icon-btn {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    position: relative;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    transition: color 0.2s;
+}
+
+.icon-btn:hover {
+    color: var(--primary-color);
+}
+
+.badge-notification {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 0.6rem;
+    background-color: #dc3545;
+}
+
+.watchlist-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(30, 30, 30, 0.7);
+    border: none;
+    color: var(--text-primary);
+    width: 32px;
+    padding: 0;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+}
+
+.watchlist-btn:hover {
+    color: var(--primary-color);
+}
+
+
+/* Reużywalne formularze, moze sie przydadza (?) */
+.form-control-dark, .form-select-dark {
+    background-color: #121212 !important;
+    border: 1px solid #444 !important;
+    color: var(--text-primary) !important;
+}
+
+.form-control-dark:focus, .form-select-dark:focus {
+    background-color: #121212 !important;
+    color: var(--text-primary) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(187, 134, 252, 0.25) !important;
+}
+
+/* Kontenery i panele */
+.content-container {
+    margin-top: 2rem;
+}
+
+.section-title {
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #333;
+    padding-bottom: 0.5rem;
+    display: inline-block;
+    color: var(--text-primary);
+}
+
+.filter-panel {
+    background-color: var(--surface-color);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+.filter-panel h5 {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+.filter-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Poszczegolne ogloszenia */
+.listing-card {
+    background-color: var(--surface-color);
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.listing-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transform: translateY(-3px);
+    border-color: #444;
+}
+
+.promoted-listing-card {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(187, 134, 252, 0.4);
+}
+
+.promoted-listing-card:hover {
+    box-shadow: 0 5px 20px rgba(187, 134, 252, 0.6);
+    border-color: var(--primary-color);
+}
+
+.listing-img-wrapper {
+    position: relative;
+    padding-top: 75%;
+    background-color: #2b2b2b;
+}
+
+.listing-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.promoted-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: var(--primary-color);
+    color: #121212;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.card-price {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.price-history {
+    color: var(--secondary-color);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.card-footer-info {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.rating-stars {
+    color: #ffc107;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-primary);
+    width: 100px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.category-item:hover {
+    transform: translateY(-5px);
+    color: var(--primary-color);
+}
+
+.category-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--surface-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #333;
+    transition: border-color 0.2s ease;
+}
+
+.category-item:hover .category-icon {
+    border-color: var(--primary-color);
+}
+
+.promoted-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+    padding-top: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--surface-color);
+}
+.promoted-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+.promoted-scroll::-webkit-scrollbar-track {
+    background: var(--surface-color);
+    border-radius: 4px;
+}
+.promoted-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 4px;
+}
+.promoted-item {
+    min-width: 250px;
+    flex: 0 0 auto;
+}
+
+.btn:focus, .btn:active:focus, .form-control:focus, .form-select:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(187, 134, 252, 0.25);
+  border-color: var(--primary-color);
 }

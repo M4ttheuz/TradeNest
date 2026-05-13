@@ -19,12 +19,22 @@ namespace TradeNest.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+    
             modelBuilder.Entity<UserReview>()
                 .HasOne(r => r.TargetUser)
                 .WithMany(u => u.ReceivedReviews)
                 .HasForeignKey(r => r.TargetUserId)
                 .OnDelete(DeleteBehavior.Restrict);
+    
+            modelBuilder.Entity<UserReview>()
+                .HasOne(r => r.Author)
+                .WithMany(u => u.WrittenReviews)
+                .HasForeignKey(r => r.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+    
+            modelBuilder.Entity<UserReview>()
+                .HasIndex(r => new { r.AuthorId, r.TargetUserId })
+                .IsUnique();
         }
     }
 }

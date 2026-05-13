@@ -12,8 +12,23 @@
 
         public bool IsActive { get; set; } = true;
 
-        public ICollection<Listing> Listings { get; set; } = new List<Listing>();
-
+        // Opinie otrzymane
         public ICollection<UserReview> ReceivedReviews { get; set; } = new List<UserReview>();
-    }
+    
+        // Opinie napisane
+        public ICollection<UserReview> WrittenReviews { get; set; } = new List<UserReview>();
+    
+    
+        // Liczba opinii
+        [NotMapped] // Bo nie ma kolumny w bazie danych i nie ma potrzeby jej tam dodawac
+        public int ReviewsCount => ReceivedReviews.Count;
+    
+    
+        // Średnia ocen (dopiero od 10 opinii)
+        [NotMapped] // Bo nie ma kolumny w bazie danych i nie ma potrzeby jej tam dodawac
+        public double? AverageRating =>
+            ReviewsCount >= 10
+                ? Math.Round(ReceivedReviews.Average(r => r.Rating), 2)
+                : null;
+        }
 }

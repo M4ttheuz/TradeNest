@@ -2,56 +2,61 @@
 
 @{
     List<Category> categories = ViewBag.Categories;
+    ViewData["Title"] = "Dodaj ogłoszenie";
 }
 
-<h1>Dodawanie ogłoszenia</h1>
+<div class="filter-panel">
 
-<form method="post">
+    <h1 class="mb-4">Dodaj ogłoszenie</h1>
 
-    <div>
-        <label>Tytuł</label>
-        <input type="text" name="title" />
-    </div>
+    <form method="post">
 
-    <div>
-        <label>Opis</label>
-        <textarea name="description"></textarea>
-    </div>
+        <div class="filter-group">
+            <label class="filter-label">Tytuł</label>
+            <input type="text" name="title" class="form-control form-control-dark" />
+        </div>
 
-    <div>
-        <label>Cena</label>
-        <input type="number" step="0.01" name="price" />
-    </div>
+        <div class="filter-group">
+            <label class="filter-label">Opis</label>
+            <textarea name="description" class="form-control form-control-dark"></textarea>
+        </div>
 
-    <div>
-        <label>Kategoria</label>
+        <div class="filter-group">
+            <label class="filter-label">Cena</label>
+            <input type="number" step="0.01" name="price" class="form-control form-control-dark" />
+        </div>
 
-        <select name="categoryId" id="categorySelect" onchange="loadParameters()">
+        <div class="filter-group">
+            <label class="filter-label">Kategoria</label>
 
-            <option value="">
-                Wybierz kategorię
-            </option>
+            <select name="categoryId" id="categorySelect" class="form-select form-select-dark" onchange="loadParameters()">
 
-            @foreach (Category category in categories)
-            {
-                <option value="@category.Id">
-                    @category.Name
+                <option value="">
+                    Wybierz kategorię
                 </option>
-            }
 
-        </select>
-    </div>
+                @foreach (Category category in categories)
+                {
+                    <option value="@category.Id">
+                        @category.Name
+                    </option>
+                }
 
-    <hr />
+            </select>
+        </div>
 
-    <div id="parameters">
-    </div>
+        <hr />
 
-    <button type="submit">
-        Dodaj ogłoszenie
-    </button>
+        <div id="parameters" class="filter-group">
+        </div>
 
-</form>
+        <button type="submit" class="btn btn-primary-custom w-100 mt-2">
+            Dodaj ogłoszenie
+        </button>
+
+    </form>
+
+</div>
 
 <script>
 

@@ -1,69 +1,88 @@
 ﻿@model TradeNest.Models.Listing
 
-<h1>Edycja ogłoszenia</h1>
+@{
+    ViewData["Title"] = "Edytuj ogłoszenia";
+}
 
-<form method="post">
+<div class="filter-panel">
 
-    <input type="hidden" name="id" value="@Model.Id" />
+    <h1 class="mb-4">Edytuj ogłoszenia</h1>
 
-    <div>
-        <label>Tytuł</label>
-        <input type="text" name="title" value="@Model.Title" />
-    </div>
+    <form method="post">
 
-    <div>
-        <label>Opis</label>
-        <textarea name="description">@Model.Description</textarea>
-    </div>
+        <input type="hidden" name="id" value="@Model.Id" />
 
-    <div>
-        <label>Kategoria</label>
-        <input type="text" value="@Model.Category.Name" disabled />
-    </div>
-
-    <div>
-        <label>Cena</label>
-        <input type="number" step="0.01" name="price" value="@(Model.Prices.OrderByDescending(x => x.SetAt).FirstOrDefault()?.Price)" />
-    </div>
-
-    <hr />
-
-    @foreach (TradeNest.Models.ListingParameterValue parameter in Model.ParameterValues)
-    {
-        <div>
-
-            <label>
-                @parameter.CategoryParameter.Name
-            </label>
-
-            <input type="hidden" name="parameterValueIds" value="@parameter.Id" />
-
-            @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Text)
-            {
-                <input type="text" name="parameterValues" value="@parameter.Value" />
-            }
-
-            @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Number)
-            {
-                <input type="number" name="parameterValues" value="@parameter.Value" />
-            }
-
-            @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Date)
-            {
-                <input type="date" name="parameterValues" value="@parameter.Value" />
-            }
-
-            @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Boolean)
-            {
-                <input type="checkbox" name="parameterValues" value="true" @(parameter.Value == "true" ? "checked" : "") />
-                <input type="hidden" name="parameterValues" value="false" />
-            }
-
+        <div class="filter-group">
+            <label class="filter-label">Tytuł</label>
+            <input type="text" name="title" value="@Model.Title" class="form-control form-control-dark" />
         </div>
-    }
 
-    <button type="submit">
-        Zapisz
-    </button>
+        <div class="filter-group">
+            <label class="filter-label">Opis</label>
+            <textarea name="description" class="form-control form-control-dark">@Model.Description</textarea>
+        </div>
 
-</form>
+        <div class="filter-group">
+            <label class="filter-label">Kategoria</label>
+            <input type="text" value="@Model.Category.Name" class="form-control form-control-dark" disabled />
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Cena</label>
+            <input type="number" step="0.01" name="price"
+                   value="@(Model.Prices.OrderByDescending(x => x.SetAt).FirstOrDefault()?.Price)"
+                   class="form-control form-control-dark" />
+        </div>
+
+        <hr />
+
+        @foreach (TradeNest.Models.ListingParameterValue parameter in Model.ParameterValues)
+        {
+            <div class="filter-group">
+
+                <label class="filter-label">
+                    @parameter.CategoryParameter.Name
+                </label>
+
+                <input type="hidden" name="parameterValueIds" value="@parameter.Id" />
+
+                @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Text)
+                {
+                    <input type="text" name="parameterValues" value="@parameter.Value" class="form-control form-control-dark" />
+                }
+
+                @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Number)
+                {
+                    <input type="number" name="parameterValues" value="@parameter.Value" class="form-control form-control-dark" />
+                }
+
+                @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Date)
+                {
+                    <input type="date" name="parameterValues" value="@parameter.Value" class="form-control form-control-dark" />
+                }
+
+                @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Boolean)
+                {
+                    <div class="form-check">
+                        <input type="hidden" name="parameterValues" value="false" />
+
+                        <input type="checkbox"
+                               name="parameterValues"
+                               value="true"
+                               class="form-check-input"
+                               @(parameter.Value == "true" ? "checked" : "") />
+
+                        <label class="form-check-label">Tak</label>
+                    </div>
+                }
+
+            </div>
+        }
+
+        <button type="submit" class="btn btn-primary-custom w-100 mt-3">
+            Zapisz
+        </button>
+
+    </form>
+
+</div>

@@ -1,5 +1,7 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using TradeNest.Data;
 using TradeNest.Models;
 
 namespace TradeNest.Controllers
@@ -7,15 +9,27 @@ namespace TradeNest.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            List<Listing> listings = _context.Listings
+                .Where(x => x.IsVisible)
+                .Include(x => x.Category)
+                .Include(x => x.Prices)
+                .Include(x => x.ParameterValues)
+                .ThenInclude(x => x.CategoryParameter)
+                .OrderByDescending(x => x.CreatedAt)
+                .Take(12)
+                .ToList();
+
+            return View(listings);
         }
 
         public IActionResult Privacy()

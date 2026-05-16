@@ -48,7 +48,7 @@ namespace TradeNest.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Create");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

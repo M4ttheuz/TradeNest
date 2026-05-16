@@ -210,183 +210,69 @@
         <h4 class="section-title">Najnowsze ogłoszenia</h4>
         
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-            <div class="col">
-                <div class="listing-card">
-                    <div class="listing-img-wrapper">
-                         <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
-                            <i class="bi bi-image text-muted fs-1"></i>
-                        </div>
-                        <button class="watchlist-btn"><i class="bi bi-heart"></i></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">iPhone 13 Pro 128GB Grafit</h5>
-                        <div class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <span class="text-muted ms-1">(105)</span>
-                        </div>
-                        <div class="card-price-row">
-                            <p class="card-price">2 650 zł</p>
-                            <div class="price-history" title="Cena spada">
-                                <i class="bi bi-graph-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div class="card-footer-info">
-                            <span><i class="bi bi-geo-alt me-1"></i>Wrocław</span>
-                            <span>Przed chwilą</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col">
-                <div class="listing-card">
-                    <div class="listing-img-wrapper">
-                         <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
-                            <i class="bi bi-image text-muted fs-1"></i>
-                        </div>
-                        <button class="watchlist-btn"><i class="bi bi-heart"></i></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Krzesło Biurowe Steelcase Please V2</h5>
-                         <div class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star"></i>
-                            <span class="text-muted ms-1">(3)</span>
-                        </div>
-                        <div class="card-price-row">
-                            <p class="card-price">1 300 zł</p>
-                        </div>
-                        <div class="card-footer-info">
-                            <span><i class="bi bi-geo-alt me-1"></i>Warszawa</span>
-                            <span>30 min temu</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @foreach (TradeNest.Models.Listing listing in Model)
+            {
+                double? price = listing.Prices
+                .OrderByDescending(x => x.SetAt)
+                .FirstOrDefault()?.Price;
 
-            <div class="col">
-                <div class="listing-card">
-                    <div class="listing-img-wrapper">
-                         <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
-                            <i class="bi bi-image text-muted fs-1"></i>
-                        </div>
-                        <button class="watchlist-btn"><i class="bi bi-heart-fill" style="color:var(--primary-color)"></i></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Konsola Nintendo Switch OLED Biała</h5>
-                         <div class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                            <span class="text-muted ms-1">(24)</span>
-                        </div>
-                        <div class="card-price-row">
-                            <p class="card-price">1 280 zł</p>
-                            <div class="price-history text-muted">
-                                <i class="bi bi-dash"></i>
-                            </div>
-                        </div>
-                        <div class="card-footer-info">
-                            <span><i class="bi bi-geo-alt me-1"></i>Lublin</span>
-                            <span>1 godz temu</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col">
-                <div class="listing-card">
-                    <div class="listing-img-wrapper">
-                         <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
-                            <i class="bi bi-image text-muted fs-1"></i>
-                        </div>
-                        <button class="watchlist-btn"><i class="bi bi-heart"></i></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Nike Air Force 1 '07 Białe Rozm. 44</h5>
-                         <div class="rating-stars">
-                            <span class="text-muted fst-italic">Brak opinii</span>
-                        </div>
-                        <div class="card-price-row">
-                            <p class="card-price">390 zł</p>
-                        </div>
-                        <div class="card-footer-info">
-                            <span><i class="bi bi-geo-alt me-1"></i>Szczecin</span>
-                            <span>2 godz temu</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <div class="col">
 
-            <div class="col">
-                <div class="listing-card">
-                    <div class="listing-img-wrapper">
-                         <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
-                            <i class="bi bi-image text-muted fs-1"></i>
-                        </div>
-                        <button class="watchlist-btn"><i class="bi bi-heart"></i></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Krzesło biurowe IKEA Markus</h5>
-                         <div class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                            <i class="bi bi-star"></i>
-                            <span class="text-muted ms-1">(15)</span>
-                        </div>
-                        <div class="card-price-row">
-                            <p class="card-price">140 zł</p>
-                            <div class="price-history" title="Cena spada">
-                                <i class="bi bi-graph-down-arrow"></i>
+                    <div class="listing-card">
+
+                        <div class="listing-img-wrapper">
+
+                            <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
+                                <i class="bi bi-image text-muted fs-1"></i>
                             </div>
+
+                            <button class="watchlist-btn">
+                                <i class="bi bi-heart"></i>
+                            </button>
+
                         </div>
-                        <div class="card-footer-info">
-                            <span><i class="bi bi-geo-alt me-1"></i>Łódź</span>
-                            <span>5 godz temu</span>
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">
+                                @listing.Title
+                            </h5>
+
+                            <div class="rating-stars">
+                                <span class="text-muted fst-italic">
+                                    Brak opinii
+                                </span>
+                            </div>
+
+                            <div class="card-price-row">
+
+                                <p class="card-price">
+                                    @(price?.ToString("0.##")) zł
+                                </p>
+
+                            </div>
+
+                            <div class="card-footer-info">
+
+                                <span>
+                                    <i class="bi bi-tag me-1"></i>
+                                    @listing.Category.Name
+                                </span>
+
+                                <span>
+                                    @listing.CreatedAt.ToString("dd.MM.yyyy")
+                                </span>
+
+                            </div>
+
                         </div>
+
                     </div>
+
                 </div>
-            </div>
-            
-            <div class="col">
-                <div class="listing-card">
-                    <div class="listing-img-wrapper">
-                         <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
-                            <i class="bi bi-image text-muted fs-1"></i>
-                        </div>
-                        <button class="watchlist-btn"><i class="bi bi-heart"></i></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Gitara Fender Stratocaster Am. Pro II</h5>
-                         <div class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <span class="text-muted ms-1">(2)</span>
-                        </div>
-                        <div class="card-price-row">
-                            <p class="card-price">6 400 zł</p>
-                        </div>
-                        <div class="card-footer-info">
-                            <span><i class="bi bi-geo-alt me-1"></i>Warszawa</span>
-                            <span>Dzisiaj</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
+
         </div>
         
         <div class="text-center mt-4 mb-5">

@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Panel administratora";
+}
+
+<h1 class="mb-5">Panel administratora</h1>
+
+<style>
+    .admin-card {
+        background-color: var(--surface-color);
+        border: 1px solid #333;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .admin-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-color);
+    }
+    .admin-title {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    h1 {
+        color: var(--text-primary);
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+</style>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card admin-card mb-3">
+            <div class="card-body text-center">
+                <h5 class="card-title admin-title">Użytkownicy</h5>
+                <p class="card-text display-4" style="color: var(--text-primary);">@ViewBag.UsersCount</p>
+                <a href="@Url.Action("Users", "Admin")" class="btn btn-primary-custom w-100 mt-2">Zarządzaj</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card admin-card mb-3">
+            <div class="card-body text-center">
+                <h5 class="card-title admin-title">Ogłoszenia</h5>
+                <p class="card-text display-4" style="color: var(--text-primary);">@ViewBag.ListingsCount</p>
+                <a href="@Url.Action("Listings", "Admin")" class="btn btn-primary-custom w-100 mt-2">Zarządzaj</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card admin-card mb-3">
+            <div class="card-body text-center">
+                <h5 class="card-title admin-title">Kategorie</h5>
+                <p class="card-text display-4" style="color: var(--text-primary);">@ViewBag.CategoriesCount</p>
+                <a href="@Url.Action("Categories", "Admin")" class="btn btn-primary-custom w-100 mt-2">Zarządzaj</a>
+            </div>
+        </div>
+    </div>
+</div>

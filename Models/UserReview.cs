@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using TradeNest.Models;
 
 public class UserReview
 {

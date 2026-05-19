@@ -11,7 +11,7 @@ using TradeNest.Data;
 namespace TradeNest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260512220333_InitialCreate")]
+    [Migration("20260519164631_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -155,27 +155,33 @@ namespace TradeNest.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Role")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TradeNest.Models.UserReview", b =>
+            modelBuilder.Entity("UserReview", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -199,9 +205,10 @@ namespace TradeNest.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
-
                     b.HasIndex("TargetUserId");
+
+                    b.HasIndex("AuthorId", "TargetUserId")
+                        .IsUnique();
 
                     b.ToTable("UserReviews");
                 });
@@ -226,7 +233,7 @@ namespace TradeNest.Migrations
                         .IsRequired();
 
                     b.HasOne("TradeNest.Models.User", "Owner")
-                        .WithMany("Listings")
+                        .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -266,12 +273,12 @@ namespace TradeNest.Migrations
                     b.Navigation("Listing");
                 });
 
-            modelBuilder.Entity("TradeNest.Models.UserReview", b =>
+            modelBuilder.Entity("UserReview", b =>
                 {
                     b.HasOne("TradeNest.Models.User", "Author")
-                        .WithMany()
+                        .WithMany("WrittenReviews")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TradeNest.Models.User", "TargetUser")
@@ -306,9 +313,9 @@ namespace TradeNest.Migrations
 
             modelBuilder.Entity("TradeNest.Models.User", b =>
                 {
-                    b.Navigation("Listings");
-
                     b.Navigation("ReceivedReviews");
+
+                    b.Navigation("WrittenReviews");
                 });
 #pragma warning restore 612, 618
         }

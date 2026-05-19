@@ -30,9 +30,10 @@ namespace TradeNest.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Username = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
-                    Role = table.Column<string>(type: "TEXT", nullable: false),
+                    Login = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    Password = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Role = table.Column<int>(type: "INTEGER", nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -114,7 +115,7 @@ namespace TradeNest.Migrations
                         column: x => x.AuthorId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserReviews_Users_TargetUserId",
                         column: x => x.TargetUserId,
@@ -202,9 +203,10 @@ namespace TradeNest.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserReviews_AuthorId",
+                name: "IX_UserReviews_AuthorId_TargetUserId",
                 table: "UserReviews",
-                column: "AuthorId");
+                columns: new[] { "AuthorId", "TargetUserId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserReviews_TargetUserId",

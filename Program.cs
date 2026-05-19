@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TradeNest.Data;
 using TradeNest.Models;
+using TradeNest.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,14 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 
+builder.Services.AddScoped<UserService>();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,6 +32,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
@@ -36,20 +47,14 @@ using (IServiceScope scope = app.Services.CreateScope())
 
     context.Database.EnsureCreated();
 
-    if (!context.Users.Any())
+    var user = context.Users.FirstOrDefault(u => u.Login == "Admin");
+
+    if (user != null)
     {
-        User user = new()
-        {
-            Username = "test",
-            Password = "test",
-            Role = "Admin",
-            IsActive = true
-        };
-
-        context.Users.Add(user);
-
+        user.Role = UserRole.Admin;
         context.SaveChanges();
     }
+
 }
 
 app.Run();

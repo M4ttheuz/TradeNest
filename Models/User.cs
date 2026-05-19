@@ -1,15 +1,27 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace TradeNest.Models
 {
+    public enum UserRole
+    {
+        User = 0,
+        Admin = 1
+    }
     public class User
     {
+        [Required]
         public int Id { get; set; }
-
-        public string Username { get; set; } = null!;
-
+        [Required]
+        [MaxLength(100)]
+        public string Login { get; set; } = null!;
+        [Required]
+        [MaxLength(200)]
+        public string Email { get; set; } = null!;
+        [Required]
+        [MaxLength(100)]
         public string Password { get; set; } = null!;
 
-        public string Role { get; set; } = "User";
+        public UserRole Role { get; set; } = UserRole.User;
 
         public bool IsActive { get; set; } = true;
 

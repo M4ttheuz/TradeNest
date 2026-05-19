@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Logowanie";
+}
+
+<div class="auth-card">
+
+    <!-- TABS -->
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('login')">Logowanie</div>
+        <div class="tab" onclick="showTab('register')">Rejestracja</div>
+    </div>
+
+    <!-- LOGIN -->
+    <form class="form active" id="login" method="post" action="/Auth/Login">
+        <input type="text" name="username" placeholder="Login" required />
+        <input type="password" name="password" placeholder="Hasło" required />
+        <button type="submit" class="btn-primary-custom">Zaloguj</button>
+    </form>
+
+    <!-- REGISTER -->
+    <form class="form" id="register" method="post" action="/Auth/Register">
+        <input type="text" name="username" placeholder="Login" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Hasło" required />
+        <input type="password" name="confirmPassword" placeholder="Powtórz hasło" required />
+        <button type="submit" class="btn-primary-custom">Zarejestruj</button>
+    </form>
+
+</div>
+
+@section Scripts {
+    <script>
+        function showTab(tab) {
+            document.querySelectorAll(".form").forEach(f => f.classList.remove("active"));
+            document.getElementById(tab).classList.add("active");
+
+            document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+
+            if (tab === "login") {
+                document.querySelectorAll(".tab")[0].classList.add("active");
+            } else {
+                document.querySelectorAll(".tab")[1].classList.add("active");
+            }
+        }
+    </script>
+}

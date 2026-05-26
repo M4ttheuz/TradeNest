@@ -13,6 +13,7 @@ namespace TradeNest.Data
         public DbSet<Listing> Listings { get; set; }
         public DbSet<ListingPrice> ListingPrices { get; set; }
         public DbSet<ListingParameterValue> ListingParameterValues { get; set; }
+        public DbSet<ListingImage> ListingImages { get; set; }
         public DbSet<UserReview> UserReviews { get; set; }
 
 
@@ -20,10 +21,22 @@ namespace TradeNest.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Listing>()
+                .HasOne(l => l.Owner)
+                .WithMany(u => u.Listings)
+                .HasForeignKey(l => l.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<UserReview>()
                 .HasOne(r => r.TargetUser)
                 .WithMany(u => u.ReceivedReviews)
                 .HasForeignKey(r => r.TargetUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserReview>()
+                .HasOne(r => r.Author)
+                .WithMany()
+                .HasForeignKey(r => r.AuthorId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

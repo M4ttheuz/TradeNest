@@ -38,6 +38,18 @@ namespace TradeNest.Data
                 .WithMany()
                 .HasForeignKey(r => r.AuthorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ListingReport>()
+                .HasOne(r => r.Listing)
+                .WithMany()
+                .HasForeignKey(r => r.ListingId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ListingReport>()
+                .HasOne(r => r.Reporter)
+                .WithMany()
+                .HasForeignKey(r => r.ReporterId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

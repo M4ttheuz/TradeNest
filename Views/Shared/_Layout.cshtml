@@ -88,9 +88,12 @@
                             <i class="bi bi-bell"></i>
                             <span class="badge rounded-pill badge-notification">3</span>
                         </button>
-                        <button class="icon-btn" title="Obserwowane">
+                        @* <button class="icon-btn" title="Obserwowane">
                             <i class="bi bi-heart"></i>
-                        </button>
+                        </button> *@
+                        <a asp-controller="Watchlist" asp-action="Index" class="icon-btn" title="Obserwowane">
+                            <i class="bi bi-heart"></i>
+                        </a>
                         <a href="/Listing/Create" class="btn btn-primary-custom ms-2 rounded-pill px-4 py-2">Dodaj Ogłoszenie</a>
                     </div>
                 </div>

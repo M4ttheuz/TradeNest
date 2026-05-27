@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TradeNest.Data;
 
@@ -10,9 +11,11 @@ using TradeNest.Data;
 namespace TradeNest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260526101931_AddedListingImages")]
+    partial class AddedListingImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.27");
@@ -178,37 +181,6 @@ namespace TradeNest.Migrations
                     b.ToTable("ListingPrices");
                 });
 
-            modelBuilder.Entity("TradeNest.Models.ListingReport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ListingId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("ReportedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ReporterId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ListingId");
-
-                    b.HasIndex("ReporterId");
-
-                    b.ToTable("ListingReport");
-                });
-
             modelBuilder.Entity("TradeNest.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -355,25 +327,6 @@ namespace TradeNest.Migrations
                         .IsRequired();
 
                     b.Navigation("Listing");
-                });
-
-            modelBuilder.Entity("TradeNest.Models.ListingReport", b =>
-                {
-                    b.HasOne("TradeNest.Models.Listing", "Listing")
-                        .WithMany()
-                        .HasForeignKey("ListingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TradeNest.Models.User", "Reporter")
-                        .WithMany()
-                        .HasForeignKey("ReporterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Listing");
-
-                    b.Navigation("Reporter");
                 });
 
             modelBuilder.Entity("TradeNest.Models.UserReview", b =>

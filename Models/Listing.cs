@@ -8,6 +8,8 @@
 
         public string Description { get; set; } = null!;
 
+        public string Location { get; set; } = null!;
+
         public bool IsVisible { get; set; } = true;
 
         public bool IsApproved { get; set; } = false;
@@ -25,5 +27,7 @@
         public ICollection<ListingPrice> Prices { get; set; } = new List<ListingPrice>();
 
         public ICollection<ListingParameterValue> ParameterValues { get; set; } = new List<ListingParameterValue>();
+
+        public ICollection<ListingImage> Images { get; set; } = new List<ListingImage>();
     }
 }

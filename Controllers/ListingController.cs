@@ -41,7 +41,6 @@ namespace TradeNest.Controllers
             string description,
             string location,
             double price,
-            string location,
             int categoryId,
             List<ParameterInputModel> parameters,
             IFormFile mainImage,     
@@ -129,7 +128,7 @@ namespace TradeNest.Controllers
             _context.Listings.Add(listing);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Listing", new { id = listing.Id });
         }
 
         public IActionResult Index()
@@ -173,7 +172,7 @@ namespace TradeNest.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, string title, string description, double price, List<int> parameterValueIds, List<string> parameterValues)
+        public IActionResult Edit(int id, string title, string description, double price, string location, List<int> parameterValueIds, List<string> parameterValues)
         {
             Listing? listing = _context.Listings
                 .Include(x => x.ParameterValues)
@@ -204,7 +203,7 @@ namespace TradeNest.Controllers
             }
 
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Listing", new { id = listing.Id });
         }
 
         public IActionResult Details(int id)

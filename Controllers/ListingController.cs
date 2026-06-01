@@ -39,6 +39,7 @@ namespace TradeNest.Controllers
         public async Task<IActionResult> Create(
             string title,
             string description,
+            string location,
             double price,
             string location,
             int categoryId,
@@ -185,6 +186,8 @@ namespace TradeNest.Controllers
             listing.Description = description;
             listing.UpdatedAt = DateTime.Now;
 
+            listing.Location = location;
+
             listing.Prices.Add(new ListingPrice
             {
                 Price = price,
@@ -202,6 +205,20 @@ namespace TradeNest.Controllers
 
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Details(int id)
+        {
+            Listing? listing = _context.Listings
+                .Include(x => x.Category)
+                .Include(x => x.Images)
+                .Include(x => x.Prices)
+                .Include(x => x.Owner)
+                .FirstOrDefault(x => x.Id == id && x.IsVisible && x.IsApproved);
+
+            if (listing == null) return NotFound();
+
+            return View(listing);
         }
     }
 }

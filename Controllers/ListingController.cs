@@ -2,23 +2,26 @@
 using Microsoft.EntityFrameworkCore;
 using TradeNest.Data;
 using TradeNest.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace TradeNest.Controllers
 {
     public class ListingController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ListingController(ApplicationDbContext context)
+        public ListingController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
         public IActionResult Create()
         {
             ViewBag.Categories = _context.Categories.ToList();
-
             return View();
         }
 
@@ -33,26 +36,26 @@ namespace TradeNest.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(
+        public async Task<IActionResult> Create(
             string title,
             string description,
             string location,
             double price,
+            string location,
             int categoryId,
-            List<ParameterInputModel> parameters)
+            List<ParameterInputModel> parameters,
+            IFormFile mainImage,     
+            List<IFormFile> additionalImages)
         {
             Listing listing = new()
             {
                 Title = title,
                 Description = description,
                 CategoryId = categoryId,
-
+                Location = location,
                 OwnerId = 1,
-
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-                Location = location,
-
                 IsVisible = true,
                 IsApproved = true
             };
@@ -63,18 +66,68 @@ namespace TradeNest.Controllers
                 SetAt = DateTime.Now
             });
 
-            foreach (var p in parameters)
+            if (parameters != null)
             {
-                listing.ParameterValues.Add(new ListingParameterValue
+                foreach (var p in parameters)
                 {
-                    CategoryParameterId = p.Id,
-                    Value = p.Value
+                    listing.ParameterValues.Add(new ListingParameterValue
+                    {
+                        CategoryParameterId = p.Id,
+                        Value = p.Value
+                    });
+                }
+            }
+
+            // Image upload handling
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            if (mainImage != null && mainImage.Length > 0)
+            {
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(mainImage.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await mainImage.CopyToAsync(fileStream);
+                }
+
+                listing.Images.Add(new ListingImage
+                {
+                    ImagePath = "/images/" + uniqueFileName,
+                    IsMain = true
                 });
             }
 
-            _context.Listings.Add(listing);
+            if (additionalImages != null && additionalImages.Count > 0)
+            {
+                foreach (var image in additionalImages)
+                {
+                    if (image.Length > 0)
+                    {
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(image.FileName);
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-            _context.SaveChanges();
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await image.CopyToAsync(fileStream);
+                        }
+
+                        listing.Images.Add(new ListingImage
+                        {
+                            ImagePath = "/images/" + uniqueFileName,
+                            IsMain = false
+                        });
+                    }
+                }
+            }
+
+            _context.Listings.Add(listing);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
@@ -87,6 +140,7 @@ namespace TradeNest.Controllers
                 .Include(x => x.Prices)
                 .Include(x => x.ParameterValues)
                 .ThenInclude(x => x.CategoryParameter)
+                .Include(x => x.Images)
                 .ToList();
 
             return View(listings);
@@ -96,13 +150,9 @@ namespace TradeNest.Controllers
         public IActionResult Delete(int id)
         {
             Listing? listing = _context.Listings.FirstOrDefault(x => x.Id == id);
-
             if (listing == null) return RedirectToAction("Index");
-
             listing.IsVisible = false;
-
             _context.SaveChanges();
-
             return RedirectToAction("Index");
         }
 
@@ -115,22 +165,15 @@ namespace TradeNest.Controllers
                 .Include(x => x.ParameterValues)
                 .ThenInclude(x => x.CategoryParameter)
                 .Include(x => x.Prices)
+                .Include(x => x.Images) 
                 .FirstOrDefault(x => x.Id == id);
 
             if (listing == null) return RedirectToAction("Index");
-
             return View(listing);
         }
 
         [HttpPost]
-        public IActionResult Edit(
-            int id,
-            string title,
-            string description,
-            string location,
-            double price,
-            List<int> parameterValueIds,
-            List<string> parameterValues)
+        public IActionResult Edit(int id, string title, string description, double price, List<int> parameterValueIds, List<string> parameterValues)
         {
             Listing? listing = _context.Listings
                 .Include(x => x.ParameterValues)
@@ -140,9 +183,7 @@ namespace TradeNest.Controllers
             if (listing == null) return RedirectToAction("Index");
 
             listing.Title = title;
-
             listing.Description = description;
-
             listing.UpdatedAt = DateTime.Now;
 
             listing.Location = location;
@@ -159,12 +200,10 @@ namespace TradeNest.Controllers
                     .FirstOrDefault(x => x.Id == parameterValueIds[i]);
 
                 if (parameter == null) continue;
-
                 parameter.Value = parameterValues[i];
             }
 
             _context.SaveChanges();
-
             return RedirectToAction("Index");
         }
 

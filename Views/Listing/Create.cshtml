@@ -9,71 +9,69 @@
 
     <h1 class="mb-4">Dodaj ogłoszenie</h1>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
 
         <div class="filter-group">
             <label class="filter-label">Tytuł</label>
-            <input type="text" name="title" class="form-control form-control-dark" />
+            <input type="text" name="title" class="form-control form-control-dark" required />
         </div>
 
         <div class="filter-group">
             <label class="filter-label">Opis</label>
-            <textarea name="description" class="form-control form-control-dark"></textarea>
+            <textarea name="description" class="form-control form-control-dark" required></textarea>
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Cena [zł]</label>
+            <input type="number" step="0.01" name="price" class="form-control form-control-dark" required />
         </div>
 
         <div class="filter-group">
             <label class="filter-label">Lokalizacja</label>
-            <input type="text" name="location" class="form-control form-control-dark" />
+            <input type="text" name="location" class="form-control form-control-dark" required />
         </div>
 
-        <div class="filter-group">
-            <label class="filter-label">Cena</label>
-            <input type="number" step="0.01" name="price" class="form-control form-control-dark" />
+        <div class="filter-group mt-3">
+            <label class="filter-label">Zdjęcie główne</label>
+            <input type="file" name="mainImage" class="form-control form-control-dark" accept="image/*" required />
         </div>
 
-        <div class="filter-group">
+        <div class="filter-group mt-3">
+            <label class="filter-label">Zdjęcia dodatkowe</label>
+            <input type="file" name="additionalImages" class="form-control form-control-dark" accept="image/*" multiple />
+        </div>
+
+        <div class="filter-group mt-3">
             <label class="filter-label">Kategoria</label>
-
-            <select name="categoryId" id="categorySelect" class="form-select form-select-dark" onchange="loadParameters()">
-
-                <option value="">
-                    Wybierz kategorię
-                </option>
-
+            <select name="categoryId" id="categorySelect" class="form-select form-select-dark" onchange="loadParameters()" required>
+                <option value="">Wybierz kategorię</option>
                 @foreach (Category category in categories)
                 {
-                    <option value="@category.Id">
-                        @category.Name
-                    </option>
+                    <option value="@category.Id">@category.Name</option>
                 }
-
             </select>
         </div>
 
         <hr />
 
-        <div id="parameters" class="filter-group">
-        </div>
+        <div id="parameters" class="filter-group"></div>
 
         <button type="submit" class="btn btn-primary-custom w-100 mt-2">
             Dodaj ogłoszenie
         </button>
 
     </form>
-
 </div>
 
 <script>
-
-    async function loadParameters()
-    {
+    async function loadParameters() {
         const categoryId = document.getElementById("categorySelect").value;
-
+        if(!categoryId) {
+            document.getElementById("parameters").innerHTML = "";
+            return;
+        }
         const response = await fetch(`/Listing/GetCategoryParameters?categoryId=${categoryId}`);
-
         const html = await response.text();
-
         document.getElementById("parameters").innerHTML = html;
     }
-
 </script>

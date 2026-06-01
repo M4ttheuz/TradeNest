@@ -36,6 +36,7 @@ namespace TradeNest.Controllers
         public IActionResult Create(
             string title,
             string description,
+            string location,
             double price,
             int categoryId,
             List<ParameterInputModel> parameters)
@@ -50,6 +51,7 @@ namespace TradeNest.Controllers
 
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
+                Location = location,
 
                 IsVisible = true,
                 IsApproved = true
@@ -125,6 +127,7 @@ namespace TradeNest.Controllers
             int id,
             string title,
             string description,
+            string location,
             double price,
             List<int> parameterValueIds,
             List<string> parameterValues)
@@ -141,6 +144,8 @@ namespace TradeNest.Controllers
             listing.Description = description;
 
             listing.UpdatedAt = DateTime.Now;
+
+            listing.Location = location;
 
             listing.Prices.Add(new ListingPrice
             {
@@ -161,6 +166,20 @@ namespace TradeNest.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Details(int id)
+        {
+            Listing? listing = _context.Listings
+                .Include(x => x.Category)
+                .Include(x => x.Images)
+                .Include(x => x.Prices)
+                .Include(x => x.Owner)
+                .FirstOrDefault(x => x.Id == id && x.IsVisible && x.IsApproved);
+
+            if (listing == null) return NotFound();
+
+            return View(listing);
         }
     }
 }

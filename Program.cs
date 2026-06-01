@@ -47,7 +47,26 @@ using (IServiceScope scope = app.Services.CreateScope())
         };
 
         context.Users.Add(user);
+        context.SaveChanges();
+    }
 
+    if (!context.Categories.Any(c => c.Name == "Samochody Osobowe"))
+    {
+        Category carCategory = new()
+        {
+            Name = "Samochody Osobowe",
+            Parameters = new List<CategoryParameter>
+            {
+                new CategoryParameter { Name = "Marka", Type = ParameterType.Text, IsRequired = true },
+                new CategoryParameter { Name = "Model", Type = ParameterType.Text, IsRequired = true },
+                new CategoryParameter { Name = "Rok produkcji", Type = ParameterType.Number, IsRequired = true },
+                new CategoryParameter { Name = "Przebieg (km)", Type = ParameterType.Number, IsRequired = true },
+                new CategoryParameter { Name = "Pojemność silnika (cm³)", Type = ParameterType.Number, IsRequired = false },
+                new CategoryParameter { Name = "Uszkodzony", Type = ParameterType.Boolean, IsRequired = false }
+            }
+        };
+
+        context.Categories.Add(carCategory);
         context.SaveChanges();
     }
 }

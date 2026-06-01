@@ -23,6 +23,7 @@ namespace TradeNest.Controllers
                 .Where(x => x.IsVisible)
                 .Include(x => x.Category)
                 .Include(x => x.Prices)
+                .Include(x => x.Images)
                 .Include(x => x.ParameterValues)
                 .ThenInclude(x => x.CategoryParameter)
                 .OrderByDescending(x => x.CreatedAt)

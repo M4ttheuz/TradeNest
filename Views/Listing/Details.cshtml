@@ -1,0 +1,206 @@
+﻿@model TradeNest.Models.Listing
+
+@{
+    ViewData["Title"] = Model.Title;
+
+    double? price = Model.Prices
+        .OrderByDescending(x => x.SetAt)
+        .FirstOrDefault()?.Price;
+
+    TradeNest.Models.ListingImage? mainImage = Model.Images
+        .FirstOrDefault(x => x.IsMain);
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <form method="get" asp-controller="Search" asp-action="Index">
+            <div class="input-group">
+                <input name="phrase"
+                       class="form-control form-control-dark"
+                       type="search"
+                       placeholder="Czego szukasz?" />
+                <button class="btn btn-primary-custom" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row g-4">
+
+    <div class="col-lg-8">
+
+        <div class="listing-card">
+
+            <div class="listing-img-wrapper ratio ratio-3x4">
+
+                @if (mainImage != null)
+                {
+                    <img src="@mainImage.ImagePath"
+                         alt="@Model.Title"
+                         class="w-100 h-100 object-fit-cover" />
+                }
+                else
+                {
+                    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-image text-muted fs-1"></i>
+                    </div>
+                }
+                <button class="watchlist-btn">
+                    <i class="bi bi-heart"></i>
+                </button>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+
+                    <h1 class="mb-3">
+                        @Model.Title
+                    </h1>
+
+                    <div class="d-flex flex-wrap gap-3 text-muted">
+
+                        <span>
+                            <i class="bi bi-tag me-1"></i>
+                            @Model.Category.Name
+                        </span>
+
+                        <span>
+                            <i class="bi bi-geo-alt me-1"></i>
+                            @Model.Location
+                        </span>
+
+                        <span>
+                            <i class="bi bi-calendar me-1"></i>
+                            @Model.CreatedAt.ToString("dd.MM.yyyy")
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-5">
+
+                    <div class="card-price fs-2">
+                        @(price?.ToString("0.##")) zł
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <h4 class="section-title mb-3">
+                        Opis
+                    </h4>
+
+                    <p class="mb-0">
+                        @Model.Description
+                    </p>
+
+                </div>
+
+                @if (Model.ParameterValues.Any())
+                {
+                    <div class="mb-3">
+
+                        <h4 class="section-title mb-3">
+                            Szczegóły
+                        </h4>
+
+                        <table class="table table-dark table-bordered mb-0">
+                            @foreach (var pv in Model.ParameterValues)
+                            {
+                                <tr>
+                                    <td class="text-muted w-50">@pv.CategoryParameter.Name</td>
+                                    <td>
+                                        @if (pv.CategoryParameter.Type == TradeNest.Models.ParameterType.Boolean)
+                                        {
+                                            @(pv.Value.ToLower() == "true" ? "Tak" : "Nie")
+                                        }
+                                        else
+                                        {
+                                            @pv.Value
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="filter-panel">
+
+            <h5 class="section-title">
+                Sprzedający
+            </h5>
+
+            <div class="d-flex align-items-center gap-3 mb-4">
+
+                <div class="category-icon">
+                    <i class="bi bi-person"></i>
+                </div>
+
+                <div>
+
+                    <div>
+                        @Model.Owner.Username
+                    </div>
+
+                    <div class="text-muted">
+                        ID użytkownika: @Model.OwnerId
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button class="btn btn-primary-custom w-100 mb-2">
+                Napisz wiadomość
+            </button>
+
+            <button class="btn btn-secondary-custom w-100">
+                Zgłoś ogłoszenie
+            </button>
+
+        </div>
+
+        <div class="filter-panel mt-3">
+
+            <h5 class="section-title mb-3">
+                Zarządzanie ogłoszeniem
+            </h5>
+
+            <div class="d-grid gap-2">
+
+                <form method="get" action="/Listing/Edit/@Model.Id">
+                    <button type="submit" class="btn btn-primary-custom w-100">
+                        Edytuj
+                    </button>
+                </form>
+
+                <form method="post" action="/Listing/Delete">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button type="submit" class="btn btn-secondary-custom w-100">
+                        Usuń
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

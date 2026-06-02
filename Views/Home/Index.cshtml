@@ -1,6 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Strona Główna";
 }
+
+<div class="row mb-4">
+    <div class="col-12">
+        <form method="get" asp-controller="Search" asp-action="Index">
+            <div class="input-group">
+                <input name="phrase"
+                       class="form-control form-control-dark"
+                       type="search"
+                       placeholder="Czego szukasz?" />
+                <button class="btn btn-primary-custom" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-12">
         <div class="hero-categories">
@@ -167,48 +184,10 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-3 mb-4 mb-lg-0">
-        <div class="filter-panel">
-            <h5>Filtry</h5>
-            
-            <div class="filter-group">
-                <label class="filter-label">Kategoria</label>
-                <select class="form-select form-select-dark">
-                    <option>Wszystkie kategorie</option>
-                    <option>Motoryzacja</option>
-                    <option>Elektronika</option>
-                    <option>Moda</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label class="filter-label">Zakres cen</label>
-                <div class="d-flex gap-2">
-                    <input type="number" class="form-control form-control-dark" placeholder="Od" />
-                    <input type="number" class="form-control form-control-dark" placeholder="Do" />
-                </div>
-            </div>
-            
-            <div class="filter-group">
-                <label class="filter-label">Rok produkcji (Samochody)</label>
-                <div class="d-flex gap-2">
-                    <input type="number" class="form-control form-control-dark" placeholder="Od" />
-                    <input type="number" class="form-control form-control-dark" placeholder="Do" />
-                </div>
-            </div>
-            
-             <div class="filter-group">
-                <label class="filter-label">Marka</label>
-                <input type="text" class="form-control form-control-dark" placeholder="Szukaj marki..." />
-            </div>
-
-            <button class="btn btn-primary-custom w-100 mt-2">Zastosuj filtry</button>
-        </div>
-    </div>
-    
+   
     <div class="col-lg-9">
         <h4 class="section-title">Najnowsze ogłoszenia</h4>
-        
+
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
 
             @foreach (TradeNest.Models.Listing listing in Model)
@@ -219,61 +198,69 @@
 
                 <div class="col">
 
-                    <div class="listing-card">
+                    <a asp-controller="Listing"
+                       asp-action="Details"
+                       asp-route-id="@listing.Id"
+                       class="text-decoration-none text-reset">
 
-                        <div class="listing-img-wrapper">
+                        <div class="listing-card">
 
-                            <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
-                                <i class="bi bi-image text-muted fs-1"></i>
+                            <div class="listing-img-wrapper">
+
+                                <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
+                                    <i class="bi bi-image text-muted fs-1"></i>
+                                </div>
+
+                                <button class="watchlist-btn">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+
                             </div>
 
-                            <button class="watchlist-btn">
-                                <i class="bi bi-heart"></i>
-                            </button>
+                            <div class="card-body">
+
+                                <h5 class="card-title">
+                                    @listing.Title
+                                </h5>
+
+                                <div class="rating-stars">
+                                    <span class="text-muted fst-italic">
+                                        Brak opinii
+                                    </span>
+                                </div>
+
+                                <div class="card-price-row">
+
+                                    <p class="card-price">
+                                        @(price?.ToString("0.##")) zł
+                                    </p>
+
+                                </div>
+
+                                <div class="card-footer-info">
+
+                                    <span>
+                                        <i class="bi bi-tag me-1"></i>
+                                        @listing.Category.Name
+                                    </span>
+
+                                    <span>
+                                        @listing.CreatedAt.ToString("dd.MM.yyyy")
+                                    </span>
+
+                                </div>
+
+                            </div>
 
                         </div>
 
-                        <div class="card-body">
-
-                            <h5 class="card-title">
-                                @listing.Title
-                            </h5>
-
-                            <div class="rating-stars">
-                                <span class="text-muted fst-italic">
-                                    Brak opinii
-                                </span>
-                            </div>
-
-                            <div class="card-price-row">
-
-                                <p class="card-price">
-                                    @(price?.ToString("0.##")) zł
-                                </p>
-
-                            </div>
-
-                            <div class="card-footer-info">
-
-                                <span>
-                                    <i class="bi bi-tag me-1"></i>
-                                    @listing.Category.Name
-                                </span>
-
-                                <span>
-                                    @listing.CreatedAt.ToString("dd.MM.yyyy")
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                    </a>
 
                 </div>
             }
 
         </div>
+    </div>
         
         <div class="text-center mt-4 mb-5">
             <button class="btn btn-secondary-custom px-4 rounded-pill">Załaduj więcej</button>

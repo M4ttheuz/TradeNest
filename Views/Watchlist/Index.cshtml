@@ -13,291 +13,19 @@
     </div>
 
     <div class="d-flex gap-2">
-        <button class="btn btn-secondary-custom rounded-pill">
-            <i class="bi bi-funnel me-2"></i>Filtry
-        </button>
+        <form method="get" asp-controller="Watchlist" asp-action="Index" class="d-inline">
+            <input type="hidden" name="phrase" value="@ViewBag.Phrase" />
+            <button class="btn btn-secondary-custom rounded-pill">
+                <i class="bi bi-funnel me-2"></i>Filtry
+            </button>
+        </form>
 
-        <button class="btn btn-primary-custom rounded-pill">
+        <a asp-controller="Watchlist" asp-action="Index"
+           class="btn btn-primary-custom rounded-pill">
             <i class="bi bi-arrow-repeat me-2"></i>Odśwież
-        </button>
+        </a>
     </div>
 </div>
-
-@* <div class="row g-4">
-
-    <!-- card -->
-    <div class="col-md-6 col-lg-4">
-        <div class="listing-card promoted-listing-card">
-
-            <div class="listing-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop"
-                     class="listing-img"
-                     alt="Sneakers">
-
-                <span class="promoted-badge">
-                    PROMOWANE
-                </span>
-
-                <button class="watchlist-btn">
-                    <i class="bi bi-heart-fill"></i>
-                </button>
-            </div>
-
-            <div class="card-body d-flex flex-column p-3">
-
-                <div class="rating-stars">
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-half"></i>
-                </div>
-
-                <h5 class="card-title">
-                    Nike Air Max 270 – stan idealny
-                </h5>
-
-                <div class="card-price-row">
-                    <p class="card-price">349 zł</p>
-
-                    <span class="price-history">
-                        <i class="bi bi-graph-down"></i>
-                        -10%
-                    </span>
-                </div>
-
-                <div class="card-footer-info">
-                    <span>
-                        <i class="bi bi-geo-alt"></i>
-                        Kraków
-                    </span>
-
-                    <span>
-                        2h temu
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- card -->
-    <div class="col-md-6 col-lg-4">
-        <div class="listing-card">
-
-            <div class="listing-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?q=80&w=1200&auto=format&fit=crop"
-                     class="listing-img"
-                     alt="Macbook">
-
-                <button class="watchlist-btn">
-                    <i class="bi bi-heart-fill"></i>
-                </button>
-            </div>
-
-            <div class="card-body d-flex flex-column p-3">
-
-                <div class="rating-stars">
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star"></i>
-                </div>
-
-                <h5 class="card-title">
-                    MacBook Pro M2 16GB / 512GB
-                </h5>
-
-                <div class="card-price-row">
-                    <p class="card-price">6299 zł</p>
-                </div>
-
-                <div class="card-footer-info">
-                    <span>
-                        <i class="bi bi-geo-alt"></i>
-                        Warszawa
-                    </span>
-
-                    <span>
-                        Wczoraj
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- card -->
-    <div class="col-md-6 col-lg-4">
-        <div class="listing-card item-purchased">
-
-            <div class="listing-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop"
-                     class="listing-img"
-                     alt="BMW">
-
-                <button class="watchlist-btn">
-                    <i class="bi bi-heart-fill"></i>
-                </button>
-            </div>
-
-            <div class="card-body d-flex flex-column p-3">
-
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="badge bg-success">
-                        Sprzedane
-                    </span>
-
-                    <small class="text-secondary">
-                        archiwum
-                    </small>
-                </div>
-
-                <h5 class="card-title">
-                    BMW M4 Competition 2022
-                </h5>
-
-                <div class="card-price-row">
-                    <p class="card-price">289 000 zł</p>
-                </div>
-
-                <div class="card-footer-info">
-                    <span>
-                        <i class="bi bi-geo-alt"></i>
-                        Gdańsk
-                    </span>
-
-                    <span>
-                        3 dni temu
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- card -->
-    <div class="col-md-6 col-lg-4">
-        <div class="listing-card">
-
-            <div class="listing-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200&auto=format&fit=crop"
-                     class="listing-img"
-                     alt="Watch">
-
-                <button class="watchlist-btn">
-                    <i class="bi bi-heart-fill"></i>
-                </button>
-            </div>
-
-            <div class="card-body d-flex flex-column p-3">
-
-                <h5 class="card-title">
-                    Apple Watch Ultra 2
-                </h5>
-
-                <div class="card-price-row">
-                    <p class="card-price">3199 zł</p>
-                </div>
-
-                <div class="card-footer-info">
-                    <span>
-                        <i class="bi bi-geo-alt"></i>
-                        Poznań
-                    </span>
-
-                    <span>
-                        5h temu
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- card -->
-    <div class="col-md-6 col-lg-4">
-        <div class="listing-card promoted-listing-card">
-
-            <div class="listing-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1517336714739-489689fd1ca8?q=80&w=1200&auto=format&fit=crop"
-                     class="listing-img"
-                     alt="Gaming setup">
-
-                <span class="promoted-badge">
-                    HOT
-                </span>
-
-                <button class="watchlist-btn">
-                    <i class="bi bi-heart-fill"></i>
-                </button>
-            </div>
-
-            <div class="card-body d-flex flex-column p-3">
-
-                <h5 class="card-title">
-                    RTX 5090 Gaming PC RGB Setup
-                </h5>
-
-                <div class="card-price-row">
-                    <p class="card-price">14 999 zł</p>
-
-                    <span class="price-history">
-                        <i class="bi bi-graph-up"></i>
-                        Popularne
-                    </span>
-                </div>
-
-                <div class="card-footer-info">
-                    <span>
-                        <i class="bi bi-geo-alt"></i>
-                        Wrocław
-                    </span>
-
-                    <span>
-                        30 min temu
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- card -->
-    <div class="col-md-6 col-lg-4">
-        <div class="listing-card">
-
-            <div class="listing-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop"
-                     class="listing-img"
-                     alt="Headphones">
-
-                <button class="watchlist-btn">
-                    <i class="bi bi-heart-fill"></i>
-                </button>
-            </div>
-
-            <div class="card-body d-flex flex-column p-3">
-
-                <h5 class="card-title">
-                    Sony WH-1000XM5
-                </h5>
-
-                <div class="card-price-row">
-                    <p class="card-price">1199 zł</p>
-                </div>
-
-                <div class="card-footer-info">
-                    <span>
-                        <i class="bi bi-geo-alt"></i>
-                        Katowice
-                    </span>
-
-                    <span>
-                        dziś
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div> *@
 
 <div class="row g-4">
 
@@ -328,7 +56,12 @@
 
             <div class="col-md-6 col-lg-4">
 
-                <div class="listing-card">
+                <a asp-controller="Listing"
+                   asp-action="Details"
+                   asp-route-id="@listing.Id"
+                   class="text-decoration-none text-reset d-block">
+    
+                    <div class="listing-card">
 
                     <div class="listing-img-wrapper">
 
@@ -336,9 +69,27 @@
                              class="listing-img"
                              alt="@listing.Title">
 
-                        <button class="watchlist-btn">
+                        @* <button class="watchlist-btn">
                             <i class="bi bi-heart-fill"></i>
-                        </button>
+                        </button> *@
+                        <form asp-controller="Watchlist"
+                              asp-action="Toggle"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="listingId"
+                                   value="@listing.Id" />
+
+                            <button type="submit"
+                                    class="watchlist-btn"
+                                    onclick="event.stopPropagation();">
+                                <i class="bi bi-heart-fill"
+                                   style="color:var(--primary-color)">
+                                </i>
+                            </button>
+
+                        </form>
+
 
                     </div>
 
@@ -372,6 +123,7 @@
                     </div>
 
                 </div>
+                </a>
 
             </div>
         }

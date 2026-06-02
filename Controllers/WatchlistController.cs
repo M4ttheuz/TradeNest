@@ -17,7 +17,7 @@ namespace TradeNest.Controllers
 
         public async Task<IActionResult> Index()
         {
-            int userId = 1; // TEMP DEBUG USER
+            int userId = 1; // temp
 
             var user = await _context.Users
                 .Include(u => u.SavedListings)
@@ -45,5 +45,46 @@ namespace TradeNest.Controllers
 
             return View(savedListings);
         }
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Toggle(int listingId)
+        {
+            int userId = 1; // temp
+
+            var user = await _context.Users
+                .Include(u => u.SavedListings)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return NotFound();
+
+            var listing = await _context.Listings
+                .FirstOrDefaultAsync(l => l.Id == listingId);
+
+            if (listing == null)
+                return NotFound();
+
+            if (user.SavedListings.Any(x => x.Id == listingId))
+            {
+                user.SavedListings.Remove(listing);
+
+                Console.WriteLine($"USUNIETO Z WATCHLISTY: {listing.Title}");
+            }
+            else
+            {
+                user.SavedListings.Add(listing);
+
+                Console.WriteLine($"DODANO DO WATCHLISTY: {listing.Title}");
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+
     }
 }

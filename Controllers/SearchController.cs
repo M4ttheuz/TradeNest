@@ -58,19 +58,9 @@ public class SearchController : Controller
                 .ToList();
 
             var parameters = await _db.CategoryParameters
-    .Where(p => paramIds.Contains(p.Id))
-    .AsNoTracking()
-    .ToListAsync();
-
-            // TEMP DEBUG
-            Console.WriteLine($"[DEBUG] filters.Count={filters.Count}");
-            foreach (var f in filters)
-                Console.WriteLine($"[DEBUG] filter key='{f.Key}', value='{f.Value}'");
-
-            Console.WriteLine($"[DEBUG] paramIds={string.Join(",", paramIds)}");
-            Console.WriteLine($"[DEBUG] parameters.Count={parameters.Count}");
-            foreach (var p in parameters)
-                Console.WriteLine($"[DEBUG] param id={p.Id}, name={p.Name}, type={p.Type}");
+                .Where(p => paramIds.Contains(p.Id))
+                .AsNoTracking()
+                .ToListAsync();
 
             foreach (var param in parameters)
             {
@@ -94,17 +84,6 @@ public class SearchController : Controller
                         break;
 
                     case ParameterType.Number:
-                        var debugValues = await _db.ListingParameterValues
-                            .Where(pv => pv.CategoryParameterId == id)
-                            .AsNoTracking()
-                            .ToListAsync();
-
-                        foreach (var dv in debugValues)
-                            Console.WriteLine($"[DEBUG] ListingId={dv.ListingId}, Value='{dv.Value}'");
-
-                        Console.WriteLine($"[DEBUG] hasMin={hasMin}, minRaw='{minRaw}', minNum={minNum}");
-                        Console.WriteLine($"[DEBUG] hasMax={hasMax}, maxRaw='{maxRaw}', maxNum={maxNum}");
-
                         if (!hasMin && !hasMax) break;
                         var matchingIds = await _db.ListingParameterValues
                             .Where(pv => pv.CategoryParameterId == id)
@@ -166,6 +145,8 @@ public class SearchController : Controller
             .Include(c => c.Parameters)
             .AsNoTracking()
             .ToListAsync();
+
+        ViewBag.Filters = filters;
 
         return View(listings);
     }

@@ -1,6 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Strona Główna";
 }
+
+<div class="row mb-4">
+    <div class="col-12">
+        <form method="get" asp-controller="Search" asp-action="Index">
+            <div class="input-group">
+                <input name="phrase"
+                       class="form-control form-control-dark"
+                       type="search"
+                       placeholder="Czego szukasz?" />
+                <button class="btn btn-primary-custom" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-12">
         <div class="hero-categories">
@@ -167,45 +184,7 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-3 mb-4 mb-lg-0">
-        <div class="filter-panel">
-            <h5>Filtry</h5>
-            
-            <div class="filter-group">
-                <label class="filter-label">Kategoria</label>
-                <select class="form-select form-select-dark">
-                    <option>Wszystkie kategorie</option>
-                    <option>Motoryzacja</option>
-                    <option>Elektronika</option>
-                    <option>Moda</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label class="filter-label">Zakres cen</label>
-                <div class="d-flex gap-2">
-                    <input type="number" class="form-control form-control-dark" placeholder="Od" />
-                    <input type="number" class="form-control form-control-dark" placeholder="Do" />
-                </div>
-            </div>
-            
-            <div class="filter-group">
-                <label class="filter-label">Rok produkcji (Samochody)</label>
-                <div class="d-flex gap-2">
-                    <input type="number" class="form-control form-control-dark" placeholder="Od" />
-                    <input type="number" class="form-control form-control-dark" placeholder="Do" />
-                </div>
-            </div>
-            
-             <div class="filter-group">
-                <label class="filter-label">Marka</label>
-                <input type="text" class="form-control form-control-dark" placeholder="Szukaj marki..." />
-            </div>
-
-            <button class="btn btn-primary-custom w-100 mt-2">Zastosuj filtry</button>
-        </div>
-    </div>
-    
+   
     <div class="col-lg-9">
         <h4 class="section-title">Najnowsze ogłoszenia</h4>
 

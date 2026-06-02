@@ -1,8 +1,18 @@
 ﻿@model List<Listing>
 
 @{
+	if (string.IsNullOrEmpty(ViewBag.Phrase))
+    {
+        ViewData["Title"] = "Wyszukiwanie";
+    }
+    else
+    {
+        ViewData["Title"] = ViewBag.Phrase;
+    }
+
     int? selectedCategoryId = ViewBag.SelectedCategoryId;
     List<Category> categories = ViewBag.Categories;
+    Dictionary<string, string> filters = ViewBag.Filters ?? new Dictionary<string, string>();
 
     Category? selectedCategory = selectedCategoryId.HasValue
         ? categories.FirstOrDefault(x => x.Id == selectedCategoryId)
@@ -72,6 +82,7 @@
                             {
                                 <input type="text"
                                        name="filters[@parameter.Id]"
+                                       value="@(filters.GetValueOrDefault(parameter.Id.ToString()))"
                                        class="form-control form-control-dark" />
                             }
                             @if (parameter.Type == ParameterType.Number)
@@ -79,10 +90,12 @@
                                 <div class="d-flex gap-2">
                                     <input type="number"
                                            name="filters[@(parameter.Id + "_min")]"
+                                           value="@(filters.GetValueOrDefault(parameter.Id + "_min"))"
                                            placeholder="Od"
                                            class="form-control form-control-dark" />
                                     <input type="number"
                                            name="filters[@(parameter.Id + "_max")]"
+                                           value="@(filters.GetValueOrDefault(parameter.Id + "_max"))"
                                            placeholder="Do"
                                            class="form-control form-control-dark" />
                                 </div>
@@ -92,16 +105,18 @@
                                 <select name="filters[@parameter.Id]"
                                         class="form-select form-select-dark">
                                     <option value="">Dowolne</option>
-                                    <option value="true">Tak</option>
-                                    <option value="false">Nie</option>
+                                    <option value="true" selected="@(filters.GetValueOrDefault(parameter.Id.ToString()) == "true")">Tak</option>
+                                    <option value="false" selected="@(filters.GetValueOrDefault(parameter.Id.ToString()) == "false")">Nie</option>
                                 </select>
                             }
                             @if (parameter.Type == ParameterType.Date)
                             {
                                 <input type="date"
                                        name="filters[@parameter.Id]"
+                                       value="@(filters.GetValueOrDefault(parameter.Id.ToString()))"
                                        class="form-control form-control-dark" />
                             }
+
                         </div>
                     }
                 }

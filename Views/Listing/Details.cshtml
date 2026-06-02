@@ -33,18 +33,18 @@
 
         <div class="listing-card">
 
-            <div class="listing-img-wrapper ratio ratio-3x4">
+            <div class="mb-4 text-center bg-dark rounded d-flex justify-content-center align-items-center details-listing-img-wrapper">
 
                 @if (mainImage != null)
                 {
                     <img src="@mainImage.ImagePath"
                          alt="@Model.Title"
-                         class="w-100 h-100 object-fit-cover" />
+                         class="img-fluid details-listing-img" />
                 }
                 else
                 {
-                    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
-                        <i class="bi bi-image text-muted fs-1"></i>
+                    <div class="w-100 d-flex align-items-center justify-content-center details-no-image-wrapper">
+                        <i class="bi bi-image text-muted details-no-image-icon"></i>
                     </div>
                 }
                 <button class="watchlist-btn">

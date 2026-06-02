@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<TradeNest.Models.Listing>
+
+@{
     ViewData["Title"] = "Obserwowane";
 }
 
@@ -21,7 +23,7 @@
     </div>
 </div>
 
-<div class="row g-4">
+@* <div class="row g-4">
 
     <!-- card -->
     <div class="col-md-6 col-lg-4">
@@ -294,5 +296,85 @@
             </div>
         </div>
     </div>
+
+</div> *@
+
+<div class="row g-4">
+
+    @if (!Model.Any())
+    {
+        <div class="col-12">
+            <div class="watchlist-empty">
+                <i class="bi bi-heart"></i>
+
+                <h3>Brak obserwowanych ogłoszeń</h3>
+
+                <p class="text-secondary-custom">
+                    Dodaj pierwsze oferty do obserwowanych.
+                </p>
+            </div>
+        </div>
+    }
+    else
+    {
+        @foreach (var listing in Model)
+        {
+            var mainImage = listing.Images.FirstOrDefault(i => i.IsMain)
+            ?? listing.Images.FirstOrDefault();
+
+            var latestPrice = listing.Prices
+            .OrderByDescending(p => p.SetAt)
+            .FirstOrDefault();
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="listing-card">
+
+                    <div class="listing-img-wrapper">
+
+                        <img src="@(mainImage?.ImagePath ?? "/images/placeholder.jpg")"
+                             class="listing-img"
+                             alt="@listing.Title">
+
+                        <button class="watchlist-btn">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+
+                    </div>
+
+                    <div class="card-body d-flex flex-column p-3">
+
+                        <h5 class="card-title">
+                            @listing.Title
+                        </h5>
+
+                        <div class="card-price-row">
+
+                            <p class="card-price">
+                                @(latestPrice?.Price.ToString("N0") ?? "0") zł
+                            </p>
+
+                        </div>
+
+                        <div class="card-footer-info">
+
+                            <span>
+                                <i class="bi bi-geo-alt"></i>
+                                @listing.Location
+                            </span>
+
+                            <span>
+                                @listing.CreatedAt.ToString("dd.MM.yyyy")
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+    }
 
 </div>

@@ -288,37 +288,35 @@ html {
     transition: border-color 0.2s ease;
 }
 
-.category-item:hover .category-icon {
-    border-color: var(--primary-color);
+.listing-no-image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.promoted-scroll {
-    display: flex;
-    overflow-x: auto;
-    gap: 1.5rem;
-    padding-bottom: 2rem;
-    padding-top: 1rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    margin-left: -0.5rem;
-    margin-right: -0.5rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) var(--surface-color);
+.details-listing-img-wrapper {
+    min-height: 400px;
+    max-height: 600px;
+    overflow: hidden;
 }
-.promoted-scroll::-webkit-scrollbar {
-    height: 6px;
+
+.details-listing-img {
+    max-height: 600px;
+    object-fit: contain;
 }
-.promoted-scroll::-webkit-scrollbar-track {
-    background: var(--surface-color);
-    border-radius: 4px;
+
+.details-no-image-wrapper {
+    min-height: 400px;
 }
-.promoted-scroll::-webkit-scrollbar-thumb {
-    background-color: var(--primary-color);
-    border-radius: 4px;
-}
-.promoted-item {
-    min-width: 250px;
-    flex: 0 0 auto;
+
+.details-no-image-icon {
+    font-size: 5rem;
 }
 
 .btn:focus, .btn:active:focus, .form-control:focus, .form-select:focus, .form-check-input:focus {

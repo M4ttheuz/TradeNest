@@ -213,10 +213,10 @@ namespace TradeNest.Controllers
                 .Include(x => x.Images)
                 .Include(x => x.Prices)
                 .Include(x => x.Owner)
+                .Include(x => x.ParameterValues)
+                    .ThenInclude(x => x.CategoryParameter)
                 .FirstOrDefault(x => x.Id == id && x.IsVisible && x.IsApproved);
-
             if (listing == null) return NotFound();
-
             return View(listing);
         }
     }

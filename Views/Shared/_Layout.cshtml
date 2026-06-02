@@ -53,9 +53,52 @@
         footer a:hover {
             text-decoration: underline;
         }
+        /* tutaj do rejestracji i logowania dodałem xD do poprawy jak cos kod powyzej nic mi nie pomogl */
+        .form {
+            display: none !important;
+        }
+        .form.active {
+            display: block !important;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .tab {
+            cursor: pointer;
+            padding: 10px;
+        }
+        .tab.active {
+            color: var(--primary-color);
+        }
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .logout-btn {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+        .user-dropdown:hover .user-btn {
+            opacity: 0;
+        }
+        .user-dropdown:hover .logout-btn {
+            display: block;
+        }
     </style>
 </head>
 <body>
+
+    @using TradeNest.Models
+    @{
+        var login = Context?.Session?.GetString("user");
+        var role = Context?.Session?.GetString("role");
+    }
+
     <header>
         <nav class="navbar navbar-expand-lg py-3">
             <div class="container-fluid container-xl">
@@ -68,17 +111,42 @@
                 
                 <div class="collapse navbar-collapse" id="navbarContent">                    
                     <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0 justify-content-center ms-auto">
-                        <button class="icon-btn" title="Wiadomości">
+                        @if (!string.IsNullOrEmpty(role) && role == UserRole.Admin.ToString()) {
+                        <a href="/Admin/Index" class="icon-btn text-white" title="Panel Administratora">
+                            <i class="bi bi-shield-lock"></i>
+                        </a>
+                        }
+                        else
+                        {
+                           <button class="icon-btn text-white" title="Mój Profil"> </button>
+                        }
+                        <button class="icon-btn text-white" title="Wiadomości">
                             <i class="bi bi-chat-dots"></i>
                         </button>
-                        <button class="icon-btn" title="Powiadomienia">
+                        <button class="icon-btn text-white" title="Powiadomienia">
                             <i class="bi bi-bell"></i>
                             <span class="badge rounded-pill badge-notification">3</span>
                         </button>
-                        <button class="icon-btn" title="Obserwowane">
+                        <button class="icon-btn text-white" title="Obserwowane">
                             <i class="bi bi-heart"></i>
                         </button>
-                        <a href="/Listing/Create" class="btn btn-primary-custom ms-2 rounded-pill px-4 py-2">Dodaj ogłoszenie</a>
+                        @if (!string.IsNullOrEmpty(login))
+                        {
+                            <div class="user-dropdown d-inline-block">
+                                <a href="#" class="btn btn-outline-light rounded-pill px-4 py-2 user-btn">
+                                    Witaj @login
+                                </a>
+
+                                <a href="/Auth/Logout" class="btn btn-danger rounded-pill px-4 py-2 logout-btn">
+                                    Wyloguj
+                                </a>
+                            </div>
+                            <a href="/Listing/Create" class="btn btn-primary-custom ms-2 rounded-pill px-4 py-2">Dodaj Ogłoszenie</a>
+                        }
+                        else
+                        {
+                            <a href="Auth/Login" class="btn btn-outline-light rounded-pill px-4 py-2">Zaloguj się</a>
+                        }
                     </div>
                 </div>
             </div>

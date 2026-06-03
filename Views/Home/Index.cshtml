@@ -52,11 +52,11 @@
 <div class="row mb-5">
     <div class="col-12">
         <h4 class="section-title">Wyróżnione</h4>
-        <div class="promoted-scroll">
-            <div class="promoted-item">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <div class="col">
                 <div class="listing-card promoted-listing-card">
                     <div class="listing-img-wrapper">
-                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
+                        <div class="listing-no-image-wrapper">
                             <i class="bi bi-image text-muted fs-1"></i>
                         </div>
                         <span class="promoted-badge">Promowane</span>
@@ -89,10 +89,10 @@
                 </div>
             </div>
             
-            <div class="promoted-item">
+            <div class="col">
                 <div class="listing-card promoted-listing-card">
                     <div class="listing-img-wrapper">
-                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
+                        <div class="listing-no-image-wrapper">
                             <i class="bi bi-image text-muted fs-1"></i>
                         </div>
                         <span class="promoted-badge">Promowane</span>
@@ -122,10 +122,10 @@
                 </div>
             </div>
 
-            <div class="promoted-item">
+            <div class="col">
                 <div class="listing-card promoted-listing-card">
                     <div class="listing-img-wrapper">
-                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
+                        <div class="listing-no-image-wrapper">
                             <i class="bi bi-image text-muted fs-1"></i>
                         </div>
                         <span class="promoted-badge">Promowane</span>
@@ -155,17 +155,17 @@
                 </div>
             </div>
             
-            <div class="promoted-item">
+            <div class="col">
                 <div class="listing-card promoted-listing-card">
                     <div class="listing-img-wrapper">
-                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
+                        <div class="listing-no-image-wrapper">
                             <i class="bi bi-image text-muted fs-1"></i>
                         </div>
                         <span class="promoted-badge">Promowane</span>
                         <button class="watchlist-btn"><i class="bi bi-heart"></i></button>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Skórzana Kurtka Vintage Rozm. L</h5>
+                        <h5 class="card-title">Mieszkanie 2 pok. Centrum</h5>
                         <div class="rating-stars">
                              <span class="text-muted fst-italic">Brak opinii</span>
                         </div>
@@ -206,14 +206,22 @@
                         <div class="listing-card">
 
                             <div class="listing-img-wrapper">
-
-                                <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:#2a2a2a;display:flex;align-items:center;justify-content:center;">
-                                    <i class="bi bi-image text-muted fs-1"></i>
-                                </div>
-
-                                @* <button class="watchlist-btn">
+                                @{
+                                    var mainImage = listing.Images.FirstOrDefault(x => x.IsMain);
+                                }
+                                @if (mainImage != null)
+                                {
+                                    <img src="@mainImage.ImagePath" class="listing-img" alt="@listing.Title" />
+                                }
+                                else
+                                {
+                                    <div class="listing-no-image-wrapper">
+                                        <i class="bi bi-image text-muted fs-1"></i>
+                                    </div>
+                                }
+                                <button class="watchlist-btn">
                                     <i class="bi bi-heart"></i>
-                                </button> *@
+                                </button>
                                 <form asp-controller="Watchlist"
                                       asp-action="Toggle"
                                       method="post">
@@ -237,43 +245,23 @@
                                 </h5>
 
                                 <div class="rating-stars">
-                                    <span class="text-muted fst-italic">
-                                        Brak opinii
-                                    </span>
+                                    <span class="text-muted fst-italic">Brak opinii</span>
                                 </div>
-
                                 <div class="card-price-row">
-
-                                    <p class="card-price">
-                                        @(price?.ToString("0.##")) zł
-                                    </p>
-
+                                    <p class="card-price">@(price?.ToString("0.##")) zł</p>
                                 </div>
-
                                 <div class="card-footer-info">
-
                                     <span>
-                                        <i class="bi bi-tag me-1"></i>
-                                        @listing.Category.Name
+                                        <i class="bi bi-tag me-1"></i>@listing.Category.Name
                                     </span>
-
-                                    <span>
-                                        @listing.CreatedAt.ToString("dd.MM.yyyy")
-                                    </span>
-
+                                    <span>@listing.CreatedAt.ToString("dd.MM.yyyy")</span>
                                 </div>
-
                             </div>
-
                         </div>
-
                     </a>
-
                 </div>
             }
-
         </div>
-    </div>
         
         <div class="text-center mt-4 mb-5">
             <button class="btn btn-secondary-custom px-4 rounded-pill">Załaduj więcej</button>

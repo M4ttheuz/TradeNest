@@ -30,6 +30,10 @@ namespace TradeNest.Controllers
                 .Take(12)
                 .ToList();
 
+            ViewBag.User = HttpContext.Session.GetString("user");
+            ViewBag.UserId = HttpContext.Session.GetString("userId");
+            ViewBag.Role = HttpContext.Session.GetString("role");
+
             return View(listings);
         }
 

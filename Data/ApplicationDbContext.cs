@@ -34,10 +34,14 @@ namespace TradeNest.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserReview>()
-                .HasOne(r => r.Author)
-                .WithMany()
-                .HasForeignKey(r => r.AuthorId)
-                .OnDelete(DeleteBehavior.Restrict);
+               .HasOne(r => r.Author)
+               .WithMany(u => u.WrittenReviews)
+               .HasForeignKey(r => r.AuthorId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserReview>()
+                .HasIndex(r => new { r.AuthorId, r.TargetUserId })
+                .IsUnique();
 
             modelBuilder.Entity<ListingReport>()
                 .HasOne(r => r.Listing)

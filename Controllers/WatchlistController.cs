@@ -17,7 +17,14 @@ namespace TradeNest.Controllers
 
         public async Task<IActionResult> Index()
         {
-            int userId = 1; // temp
+            string? userIdString = HttpContext.Session.GetString("userId");
+
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            int userId = int.Parse(userIdString);
 
             var user = await _context.Users
                 .Include(u => u.SavedListings)
@@ -52,7 +59,14 @@ namespace TradeNest.Controllers
         [HttpPost]
         public async Task<IActionResult> Toggle(int listingId)
         {
-            int userId = 1; // temp
+            string? userIdString = HttpContext.Session.GetString("userId");
+
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            int userId = int.Parse(userIdString);
 
             var user = await _context.Users
                 .Include(u => u.SavedListings)

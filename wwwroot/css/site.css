@@ -344,3 +344,47 @@ html {
     .rating-stars i.bi-star {
         color: #444; /* Pusta gwiazdka */
     }
+
+/* price history */
+.price-history-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.price-history-icon {
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.price-history-tooltip {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    min-width: 250px;
+    background: #1f1f1f;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 12px;
+    z-index: 1000;
+    box-shadow: 0 8px 20px rgba(0,0,0,.3);
+}
+
+.price-history-wrapper:hover .price-history-tooltip {
+    display: block;
+}
+
+.history-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+    .history-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .history-row small {
+        color: #999;
+    }

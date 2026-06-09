@@ -222,6 +222,19 @@
                                 <button class="watchlist-btn">
                                     <i class="bi bi-heart"></i>
                                 </button>
+                                <form asp-controller="Watchlist"
+                                      asp-action="Toggle"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="listingId"
+                                           value="@listing.Id" />
+
+                                    <button type="submit" class="watchlist-btn">
+                                        <i class="bi bi-heart"></i>
+                                    </button>
+
+                                </form>
 
                             </div>
 
@@ -255,3 +268,22 @@
         </div>
     </div>
 </div>
+
+@* heart *@
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.querySelectorAll('.watchlist-btn').forEach(btn => {
+
+            btn.addEventListener('click', function (e) {
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                this.closest('form').submit();
+            });
+
+        });
+
+    });
+</script>

@@ -82,13 +82,36 @@
 
                 </div>
 
-                <div class="mb-5">
+                @* Cena + historia ceny *@
+                <div class="d-flex align-items-center gap-2">
 
                     <div class="card-price fs-2">
                         @(price?.ToString("0.##")) zł
                     </div>
 
+                    @if (Model.Prices.Count > 1)
+                    {
+                        <div class="price-history-wrapper">
+
+                            <i class="bi bi-clock-history price-history-icon"></i>
+
+                            <div class="price-history-tooltip">
+
+                                @foreach (var p in Model.Prices.OrderByDescending(x => x.SetAt))
+                                {
+                                    <div class="history-row">
+                                        <span>@p.Price.ToString("N0") zł</span>
+                                        <small>@p.SetAt.ToString("dd.MM.yyyy HH:mm")</small>
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+                    }
+
                 </div>
+
 
                 <div class="mb-3">
 

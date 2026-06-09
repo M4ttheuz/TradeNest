@@ -31,6 +31,14 @@
             <input type="text" name="location" class="form-control form-control-dark" required />
         </div>
 
+        <div class="form-check mt-3">
+            <input type="hidden" name="promote" value="false" />
+            <input class="form-check-input" type="checkbox" name="promote" id="promote" value="true">
+            <label class="form-check-label" for="promote">
+                Promuj ogłoszenie przez 7 dni
+            </label>
+        </div>
+
         <div class="filter-group mt-3">
             <label class="filter-label">Zdjęcie główne</label>
             <input type="file" name="mainImage" class="form-control form-control-dark" accept="image/*" required />

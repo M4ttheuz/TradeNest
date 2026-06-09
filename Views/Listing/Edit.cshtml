@@ -84,6 +84,21 @@
             </div>
         }
 
+        <hr />
+        <div class="form-check mt-3">
+            <input type="hidden" name="promote" value="false" />
+            <input type="checkbox" class="form-check-input" name="promote" value="true" id="promote" />
+            <label class="form-check-label" for="promote">
+                Promuj ogłoszenie przez 7 dni
+            </label>
+        </div>
+        @if (Model.IsPromoted && Model.PromotionEndDate > DateTime.Now)
+        {
+            <small class="text-muted">
+                Aktualnie promowane do: @Model.PromotionEndDate.ToString("dd.MM.yyyy HH:mm")
+            </small>
+        }
+
         <button type="submit" class="btn btn-primary-custom w-100 mt-3">
             Zapisz
         </button>

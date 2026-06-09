@@ -44,6 +44,10 @@ namespace TradeNest.Controllers
             IFormFile mainImage,     
             List<IFormFile> additionalImages)
         {
+            bool promote = Request.Form["promote"].Contains("true");
+
+            DateTime promotionDate = promote ? DateTime.Now.AddDays(7) : DateTime.MinValue;
+
             Listing listing = new()
             {
                 Title = title,
@@ -54,7 +58,9 @@ namespace TradeNest.Controllers
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 IsVisible = true,
-                IsApproved = true
+                IsApproved = true,
+                IsPromoted = promote,
+                PromotionEndDate = promotionDate
             };
 
             listing.Prices.Add(new ListingPrice
@@ -152,7 +158,7 @@ namespace TradeNest.Controllers
             if (listing == null) return RedirectToAction("Index");
             listing.IsVisible = false;
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -172,36 +178,43 @@ namespace TradeNest.Controllers
         }
 
         [HttpPost]
+        [HttpPost]
         public IActionResult Edit(int id, string title, string description, double price, string location, List<int> parameterValueIds, List<string> parameterValues)
         {
             Listing? listing = _context.Listings
                 .Include(x => x.ParameterValues)
                 .Include(x => x.Prices)
                 .FirstOrDefault(x => x.Id == id);
-
             if (listing == null) return RedirectToAction("Index");
+
+            bool promote = Request.Form["promote"].Contains("true");
+            if (promote)
+            {
+                listing.IsPromoted = true;
+                listing.PromotionEndDate = DateTime.Now.AddDays(7);
+            }
 
             listing.Title = title;
             listing.Description = description;
             listing.UpdatedAt = DateTime.Now;
-
             listing.Location = location;
 
-            listing.Prices.Add(new ListingPrice
+            if (listing.Prices.Count == 0 || listing.Prices.Last().Price != price)
             {
-                Price = price,
-                SetAt = DateTime.Now
-            });
+                listing.Prices.Add(new ListingPrice
+                {
+                    Price = price,
+                    SetAt = DateTime.Now
+                });
+            }
 
             for (int i = 0; i < parameterValueIds.Count; i++)
             {
                 ListingParameterValue? parameter = listing.ParameterValues
                     .FirstOrDefault(x => x.Id == parameterValueIds[i]);
-
                 if (parameter == null) continue;
                 parameter.Value = parameterValues[i];
             }
-
             _context.SaveChanges();
             return RedirectToAction("Details", "Listing", new { id = listing.Id });
         }

@@ -14,6 +14,10 @@
 
         public bool IsApproved { get; set; } = false;
 
+        public bool IsPromoted { get; set; } = false;
+        
+        public DateTime PromotionEndDate { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }

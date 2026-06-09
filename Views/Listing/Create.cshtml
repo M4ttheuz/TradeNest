@@ -75,3 +75,41 @@
         document.getElementById("parameters").innerHTML = html;
     }
 </script>
+
+<script>
+    async function loadParameters() {
+        const categoryId = document.getElementById("categorySelect").value;
+        if (!categoryId) {
+            document.getElementById("parameters").innerHTML = "";
+            return;
+        }
+        const response = await fetch(`/Listing/GetCategoryParameters?categoryId=${categoryId}`);
+        const html = await response.text();
+        document.getElementById("parameters").innerHTML = html;
+    }
+
+    document.querySelector("form").addEventListener("submit", function (e) {
+        const paramSection = document.getElementById("parameters");
+        const requiredInputs = paramSection.querySelectorAll("input[required], select[required]");
+        let valid = true;
+
+        requiredInputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add("is-invalid");
+                valid = false;
+            } else {
+                input.classList.remove("is-invalid");
+            }
+        });
+
+        if (!valid) {
+            e.preventDefault();
+            paramSection.insertAdjacentHTML("beforebegin",
+                `<div class="alert alert-danger mt-2" id="param-error">
+                    Wypełnij wszystkie wymagane pola parametrów.
+                </div>`);
+        } else {
+            document.getElementById("param-error")?.remove();
+        }
+    });
+</script>

@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using TradeNest.Data;
 using TradeNest.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 
 namespace TradeNest.Controllers
 {
@@ -69,6 +67,8 @@ namespace TradeNest.Controllers
             {
                 foreach (var p in parameters)
                 {
+                    if (string.IsNullOrWhiteSpace(p.Value)) continue;
+
                     listing.ParameterValues.Add(new ListingParameterValue
                     {
                         CategoryParameterId = p.Id,

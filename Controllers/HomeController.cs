@@ -19,21 +19,29 @@ namespace TradeNest.Controllers
 
         public IActionResult Index()
         {
-            List<Listing> listings = _context.Listings
+            var baseQuery = _context.Listings
                 .Where(x => x.IsVisible)
                 .Include(x => x.Category)
                 .Include(x => x.Prices)
                 .Include(x => x.Images)
                 .Include(x => x.ParameterValues)
-                .ThenInclude(x => x.CategoryParameter)
+                .ThenInclude(x => x.CategoryParameter);
+
+            List<Listing> listings = baseQuery
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(12)
+                .ToList();
+
+            List<Listing> promotedListings = baseQuery
+                .Where(x => x.IsPromoted && x.PromotionEndDate > DateTime.Now)
+                .OrderByDescending(x => x.PromotionEndDate)
+                .Take(8)
                 .ToList();
 
             ViewBag.User = HttpContext.Session.GetString("user");
             ViewBag.UserId = HttpContext.Session.GetString("userId");
             ViewBag.Role = HttpContext.Session.GetString("role");
-
+            ViewBag.PromotedListings = promotedListings;
             return View(listings);
         }
 

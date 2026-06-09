@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Strona Główna";
+    List<TradeNest.Models.Listing> promotedListings = ViewBag.PromotedListings;
 }
 
 <div class="row mb-4">
@@ -64,7 +65,6 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">MacBook Pro 16" M2 Max 32GB 1TB</h5>
-                        
                         <div class="rating-stars">
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
@@ -73,14 +73,12 @@
                             <i class="bi bi-star-half"></i>
                             <span class="text-muted ms-1">(42)</span>
                         </div>
-                        
                         <div class="card-price-row">
                             <p class="card-price">10 450 zł</p>
                             <div class="price-history" title="Cena spada">
                                 <i class="bi bi-graph-down-arrow"></i>
                             </div>
                         </div>
-                        
                         <div class="card-footer-info">
                             <span><i class="bi bi-geo-alt me-1"></i>Warszawa</span>
                             <span>Dziś 14:30</span>
@@ -88,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col">
                 <div class="listing-card promoted-listing-card">
                     <div class="listing-img-wrapper">
@@ -154,7 +152,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col">
                 <div class="listing-card promoted-listing-card">
                     <div class="listing-img-wrapper">
@@ -167,7 +165,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Mieszkanie 2 pok. Centrum</h5>
                         <div class="rating-stars">
-                             <span class="text-muted fst-italic">Brak opinii</span>
+                            <span class="text-muted fst-italic">Brak opinii</span>
                         </div>
                         <div class="card-price-row">
                             <p class="card-price">420 zł</p>
@@ -183,28 +181,118 @@
     </div>
 </div>
 
+@if (promotedListings != null && promotedListings.Count > 0)
+{
+    <div class="row mb-5">
+        <div class="col-12">
+            <h4 class="section-title">Promowane ogłoszenia</h4>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                @foreach (var listing in promotedListings)
+                {
+                    var prices = listing.Prices.OrderByDescending(x => x.SetAt).ToList();
+                    double? price = prices.ElementAtOrDefault(0)?.Price;
+                    double? prevPrice = prices.ElementAtOrDefault(1)?.Price;
+
+                    <div class="col">
+                        <a asp-controller="Listing"
+                           asp-action="Details"
+                           asp-route-id="@listing.Id"
+                           class="text-decoration-none text-reset">
+                            <div class="listing-card promoted-listing-card">
+                                <div class="listing-img-wrapper">
+                                    @{
+                                        var mainImage = listing.Images.FirstOrDefault(x => x.IsMain);
+                                    }
+                                    @if (mainImage != null)
+                                    {
+                                        <img src="@mainImage.ImagePath" class="listing-img" alt="@listing.Title" />
+                                    }
+                                    else
+                                    {
+                                        <div class="listing-no-image-wrapper">
+                                            <i class="bi bi-image text-muted fs-1"></i>
+                                        </div>
+                                    }
+                                    <span class="promoted-badge">Promowane</span>
+                                    <form asp-controller="Watchlist" asp-action="Toggle" method="post">
+                                        <input type="hidden" name="listingId" value="@listing.Id" />
+                                        <button type="submit" class="watchlist-btn">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">@listing.Title</h5>
+                                    <div class="rating-stars">
+                                        <span class="text-muted fst-italic">Brak opinii</span>
+                                    </div>
+                                    <div class="card-price-row">
+                                        <p class="card-price">@(price?.ToString("0.##")) zł</p>
+                                        @if (prevPrice.HasValue && price.HasValue)
+                                        {
+                                            if (price < prevPrice)
+                                            {
+                                                <div class="price-history" title="Cena spada">
+                                                    <i class="bi bi-graph-down-arrow"></i>
+                                                </div>
+                                            }
+                                            else if (price > prevPrice)
+                                            {
+                                                <div class="price-history" style="color:#ff5252" title="Cena rośnie">
+                                                    <i class="bi bi-graph-up-arrow"></i>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="price-history text-muted" title="Cena bez zmian">
+                                                    <i class="bi bi-dash"></i>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="card-footer-info">
+                                        <span><i class="bi bi-tag me-1"></i>@listing.Category.Name</span>
+                                        @if (listing.CreatedAt.Date == DateTime.Now.Date)
+                                        {
+                                            <span>Dzisiaj o @listing.CreatedAt.ToString("HH:mm")</span>
+                                        }
+                                        else if (listing.CreatedAt.Date == DateTime.Now.Date.AddDays(-1))
+                                        {
+                                            <span>Wczoraj o @listing.CreatedAt.ToString("HH:mm")</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@listing.CreatedAt.ToString("dd.MM.yyyy")</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
 <div class="row">
-   
-    <div class="col-lg-9">
+    <div class="col-12">
         <h4 class="section-title">Najnowsze ogłoszenia</h4>
-
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             @foreach (TradeNest.Models.Listing listing in Model)
             {
-                double? price = listing.Prices
-                .OrderByDescending(x => x.SetAt)
-                .FirstOrDefault()?.Price;
+                var isPromoted = listing.IsPromoted && listing.PromotionEndDate > DateTime.Now;
+
+                var prices = listing.Prices.OrderByDescending(x => x.SetAt).ToList();
+                double? price = prices.ElementAtOrDefault(0)?.Price;
+                double? prevPrice = prices.ElementAtOrDefault(1)?.Price;
 
                 <div class="col">
-
                     <a asp-controller="Listing"
                        asp-action="Details"
                        asp-route-id="@listing.Id"
                        class="text-decoration-none text-reset">
-
-                        <div class="listing-card">
-
+                        <div class="listing-card @(isPromoted ? "promoted-listing-card" : "")">
                             <div class="listing-img-wrapper">
                                 @{
                                     var mainImage = listing.Images.FirstOrDefault(x => x.IsMain);
@@ -219,42 +307,60 @@
                                         <i class="bi bi-image text-muted fs-1"></i>
                                     </div>
                                 }
-                                <button class="watchlist-btn">
-                                    <i class="bi bi-heart"></i>
-                                </button>
-                                <form asp-controller="Watchlist"
-                                      asp-action="Toggle"
-                                      method="post">
-
-                                    <input type="hidden"
-                                           name="listingId"
-                                           value="@listing.Id" />
-
+                                @if (isPromoted)
+                                {
+                                    <span class="promoted-badge">Promowane</span>
+                                }
+                                <form asp-controller="Watchlist" asp-action="Toggle" method="post">
+                                    <input type="hidden" name="listingId" value="@listing.Id" />
                                     <button type="submit" class="watchlist-btn">
                                         <i class="bi bi-heart"></i>
                                     </button>
-
                                 </form>
-
                             </div>
-
                             <div class="card-body">
-
-                                <h5 class="card-title">
-                                    @listing.Title
-                                </h5>
-
+                                <h5 class="card-title">@listing.Title</h5>
                                 <div class="rating-stars">
                                     <span class="text-muted fst-italic">Brak opinii</span>
                                 </div>
                                 <div class="card-price-row">
                                     <p class="card-price">@(price?.ToString("0.##")) zł</p>
+                                    @if (prevPrice.HasValue && price.HasValue)
+                                    {
+                                        if (price < prevPrice)
+                                        {
+                                            <div class="price-history" title="Cena spada">
+                                                <i class="bi bi-graph-down-arrow"></i>
+                                            </div>
+                                        }
+                                        else if (price > prevPrice)
+                                        {
+                                            <div class="price-history" style="color:#ff5252" title="Cena rośnie">
+                                                <i class="bi bi-graph-up-arrow"></i>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="price-history text-muted" title="Cena bez zmian">
+                                                <i class="bi bi-dash"></i>
+                                            </div>
+                                        }
+                                    }
                                 </div>
                                 <div class="card-footer-info">
-                                    <span>
-                                        <i class="bi bi-tag me-1"></i>@listing.Category.Name
-                                    </span>
-                                    <span>@listing.CreatedAt.ToString("dd.MM.yyyy")</span>
+                                    <span><i class="bi bi-tag me-1"></i>@listing.Category.Name</span>
+                                    @if (listing.CreatedAt.Date == DateTime.Now.Date)
+                                    {
+                                        <span>Dzisiaj o @listing.CreatedAt.ToString("HH:mm")</span>
+                                    }
+                                    else if (listing.CreatedAt.Date == DateTime.Now.Date.AddDays(-1))
+                                    {
+                                        <span>Wczoraj o @listing.CreatedAt.ToString("HH:mm")</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@listing.CreatedAt.ToString("dd.MM.yyyy")</span>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -262,7 +368,6 @@
                 </div>
             }
         </div>
-        
         <div class="text-center mt-4 mb-5">
             <button class="btn btn-secondary-custom px-4 rounded-pill">Załaduj więcej</button>
         </div>
@@ -272,18 +377,12 @@
 @* heart *@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-
         document.querySelectorAll('.watchlist-btn').forEach(btn => {
-
             btn.addEventListener('click', function (e) {
-
                 e.preventDefault();
                 e.stopPropagation();
-
                 this.closest('form').submit();
             });
-
         });
-
     });
 </script>

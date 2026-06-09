@@ -75,7 +75,18 @@
 
                         <span>
                             <i class="bi bi-calendar me-1"></i>
-                            @Model.CreatedAt.ToString("dd.MM.yyyy")
+                            @if (Model.CreatedAt.Date == DateTime.Now.Date)
+                            {
+                                @("Dzisiaj o " + Model.CreatedAt.ToString("HH:mm"))
+                            }
+                            else if (Model.CreatedAt.Date == DateTime.Now.Date.AddDays(-1))
+                            {
+                                @("Wczoraj o " + Model.CreatedAt.ToString("HH:mm"))
+                            }
+                            else
+                            {
+                                @Model.CreatedAt.ToString("dd.MM.yyyy 'o' HH:mm")
+                            }
                         </span>
 
                     </div>

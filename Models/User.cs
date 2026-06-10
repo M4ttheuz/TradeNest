@@ -45,12 +45,27 @@ namespace TradeNest.Models
         public int ReviewsCount => ReceivedReviews.Count;
 
 
-        // Średnia ocen (dopiero od 10 opinii)
-        [NotMapped] // Bo nie ma kolumny w bazie danych i nie ma potrzeby jej tam dodawac
+        // Średnia ogólna ocen (wyliczana ze wszystkich składowych)
+        [NotMapped]
         public double? AverageRating =>
-            ReviewsCount >= 10
-                ? Math.Round(ReceivedReviews.Average(r => r.Rating), 2)
+            ReviewsCount >= 1
+                ? Math.Round(ReceivedReviews.Average(r => (r.DescriptionRating + r.ResponseTimeRating + r.PolitenessRating) / 3.0), 2)
                 : null;
+
+        // Średnia: Zgodność z opisem 
+        [NotMapped]
+        public double AverageDescriptionRating =>
+            ReceivedReviews.Any() ? Math.Round(ReceivedReviews.Average(r => r.DescriptionRating), 1) : 0;
+
+        // Średnia: Czas odpowiedzi 
+        [NotMapped]
+        public double AverageResponseTimeRating =>
+            ReceivedReviews.Any() ? Math.Round(ReceivedReviews.Average(r => r.ResponseTimeRating), 1) : 0;
+
+        // Średnia: Uprzejmość 
+        [NotMapped]
+        public double AveragePolitenessRating =>
+            ReceivedReviews.Any() ? Math.Round(ReceivedReviews.Average(r => r.PolitenessRating), 1) : 0;
     }
 }
 

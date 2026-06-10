@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TradeNest.Models;
 
 namespace TradeNest.Models
@@ -6,8 +7,16 @@ namespace TradeNest.Models
     public class UserReview
     {
         public int Id { get; set; }
+
+        // Trzy składowe oceny
         [Range(1, 5)]
-        public int Rating { get; set; }
+        public int DescriptionRating { get; set; } 
+
+        [Range(1, 5)]
+        public int ResponseTimeRating { get; set; } 
+
+        [Range(1, 5)]
+        public int PolitenessRating { get; set; }
         public string Comment { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
@@ -16,5 +25,11 @@ namespace TradeNest.Models
 
         public int AuthorId { get; set; }
         public User Author { get; set; } = null!;
+        public int? ListingId { get; set; }
+        public Listing? Listing { get; set; }
+
+        // Średnia ocena dla TEJ konkretnej opinii
+        [NotMapped]
+        public double AverageReviewRating => Math.Round((DescriptionRating + ResponseTimeRating + PolitenessRating) / 3.0, 2);
     }
 }

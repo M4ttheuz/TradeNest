@@ -30,6 +30,7 @@
                 <th>ID</th>
                 <th>Tytuł</th>
                 <th>Data Utworzenia</th>
+                <th>Status</th>
                 <th>Akcje</th>
             </tr>
         </thead>
@@ -40,9 +41,54 @@
                     <td>@listing.Id</td>
                     <td>@listing.Title</td>
                     <td>@listing.CreatedAt.ToShortDateString()</td>
+                    <td>@if (listing.IsVisible)
+                    {
+                        <span class="badge bg-success">
+                            Widoczne
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">
+                            Ukryte
+                        </span>
+                    }
+                    </td>
                     <td>
-                        <button class="btn btn-sm btn">Edytuj</button>
-                        <button class="btn btn-sm btn-danger">Usuń</button>
+                        <div class="d-flex gap-2 flex-wrap align-items-center">
+
+                            @if (listing.IsVisible)
+                            {
+                                <a href="/Listing/Details/@listing.Id"
+                                   class="btn btn-secondary-custom">
+                                    Skocz Do
+                                </a>
+                                <a href="/Listing/Edit/@listing.Id"
+                                   class="btn btn-primary-custom">
+                                    Edytuj
+                                </a>
+
+                                <form method="post" action="/Listing/Delete">
+                                    <input type="hidden" name="id" value="@listing.Id" />
+
+                                    <button type="submit"
+                                            class="btn btn-danger">
+                                        @(listing.IsVisible ? "Ukryj" : "Pokaż")
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" action="/Listing/Delete">
+                                    <input type="hidden" name="id" value="@listing.Id" />
+
+                                    <button type="submit"
+                                            class="btn btn-danger">
+                                        @(listing.IsVisible ? "Ukryj" : "Pokaż")
+                                    </button>
+                                </form>
+                            }
+                        </div>
                     </td>
                 </tr>
             }

@@ -30,6 +30,7 @@
                 <th>ID</th>
                 <th>Nazwa użytkownika</th>
                 <th>Rola</th>
+                <th>Status</th>
                 <th>Akcje</th>
             </tr>
         </thead>
@@ -40,9 +41,28 @@
                     <td>@user.Id</td>
                     <td>@user.Login</td>
                     <td>@user.Role</td>
+                    <td>@if (user.IsActive)
+                    {
+                        <span class="badge bg-success">
+                            Aktywny
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">
+                            Zablokowany
+                        </span>
+                    }
+                    </td>
                     <td>
-                        <button class="btn btn-sm btn-info">Edytuj</button>
-                        <button class="btn btn-sm btn-danger">Usuń</button>
+                        <form asp-action="ToggleUserStatus" asp-controller="Admin" method="post">
+                            <input type="hidden" name="userId" value="@user.Id" />
+
+                            <button type="submit"
+                                    class="btn btn-sm @(user.IsActive ? "btn-danger" : "btn-success")">
+                                @(user.IsActive ? "Zablokuj" : "Odblokuj")
+                            </button>
+                        </form>
                     </td>
                 </tr>
             }

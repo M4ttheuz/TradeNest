@@ -5,7 +5,7 @@ using TradeNest.Models;
 
 namespace TradeNest.Controllers
 {
-    public class ListingController : Controller
+    public class ListingController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
@@ -153,10 +153,10 @@ namespace TradeNest.Controllers
 
         [HttpPost]
         public IActionResult Delete(int id)
-        {
+        { 
             Listing? listing = _context.Listings.FirstOrDefault(x => x.Id == id);
             if (listing == null) return RedirectToAction("Index");
-            listing.IsVisible = false;
+            listing.IsVisible = !listing.IsVisible;
             _context.SaveChanges();
             return RedirectToAction("Index", "Home");
         }

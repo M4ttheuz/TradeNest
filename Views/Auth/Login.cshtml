@@ -6,11 +6,18 @@
     <div class="auth-card">
 
         <div class="tabs">
-            <div class="tab active" onclick="showTab('login')">Logowanie</div>
-            <div class="tab" onclick="showTab('register')">Rejestracja</div>
+            <div class="tab " onclick="showTab('login')">Logowanie</div>
+            <div class="tab active" onclick="showTab('register')">Rejestracja</div>
         </div>
+        
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
 
-        <form class="form active" id="login" method="post" action="/Auth/Login">
+        <form class="form" id="login" method="post" action="/Auth/Login">
             <div class="form-group">
                 <label for="login-username">Login</label>
                 <input type="text" id="login-username" name="username" class="form-control form-control-dark" placeholder="Wprowadź login" required />
@@ -24,7 +31,7 @@
             <button type="submit" class="btn-primary-custom w-100">Zaloguj się</button>
         </form>
 
-        <form class="form" id="register" method="post" action="/Auth/Register">
+        <form class="form active" id="register" method="post" action="/Auth/Register">
 
             <div class="form-group">
                 <label for="reg-login">Login</label>

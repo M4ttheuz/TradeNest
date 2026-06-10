@@ -35,16 +35,26 @@ namespace TradeNest.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(string login,string email,string password,string confirmPassword,string firstName,string lastName,string location,string telephoneNumber)
+        public IActionResult Register(string login, string email, string password, string confirmPassword, string firstName, string lastName, string location, string telephoneNumber)
         {
             if (password != confirmPassword)
+            {
+                TempData["Error"] = "Hasła nie są identyczne.";
                 return RedirectToAction("Login");
+            }
 
             if (_userService.UserExists(login))
+            {
+                TempData["Error"] = "Podany login już istnieje.";
                 return RedirectToAction("Login");
+            }
+                
 
             if (!IsPasswordStrong(password))
+            { 
+                TempData["Error"] = "Hasło nie spełnia wymagań bezpieczeństwa.(min. 8 znaków, mała i wielka litera, cyfra, znak specjalny)";
                 return RedirectToAction("Login");
+            }
 
             var user = new User
             {
@@ -69,15 +79,24 @@ namespace TradeNest.Controllers
             var user = _userService.GetByLogin(username);
 
             if (user == null)
+            {
+                TempData["Error"] = "Taki użytkownik nie istnieje.";
                 return RedirectToAction("Login");
+            }
 
             var result = _hasher.VerifyHashedPassword(user, user.Password, password);
 
             if (result == PasswordVerificationResult.Failed)
+            {
+                TempData["Error"] = "Login lub hasło jest nieprawidłowe.";
                 return RedirectToAction("Login");
+            }
 
             if (!user.IsActive)
+            {
+                TempData["Error"] = "To konto jest zablokowane.";
                 return RedirectToAction("Login");
+            }
 
             HttpContext.Session.SetString("user", user.Login);
             HttpContext.Session.SetString("userId", user.Id.ToString());

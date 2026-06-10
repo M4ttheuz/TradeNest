@@ -33,13 +33,14 @@
 
         <div class="listing-card">
 
-            <div class="mb-4 text-center bg-dark rounded d-flex justify-content-center align-items-center details-listing-img-wrapper">
+            <div class="mb-3 text-center bg-dark rounded d-flex justify-content-center align-items-center details-listing-img-wrapper" style="position: relative;">
 
                 @if (mainImage != null)
                 {
                     <img src="@mainImage.ImagePath"
                          alt="@Model.Title"
-                         class="img-fluid details-listing-img" />
+                         class="img-fluid details-listing-img" id="currentMainImage" 
+                         style="height: 500px;"/>;
                 }
                 else
                 {
@@ -51,6 +52,24 @@
                     <i class="bi bi-heart"></i>
                 </button>
 
+            </div>
+
+            <div class="mb-3 text-center rounded d-flex justify-content-center align-items-center" style="position: relative;">
+                @if (Model.Images != null && Model.Images.Count > 0)
+                {
+                    <div class="d-flex gap-2 pb-2 mb-4 listing-gallery-scroll" style="overflow-x: auto; white-space: nowrap; scroll-behavior: smooth;">
+                        @foreach (var img in Model.Images.OrderByDescending(x => x.IsMain))
+                        {
+                            <div class="gallery-thumbnail-wrapper" style="flex: 0 0 auto; width: 100px; height: 75px; cursor: pointer;">
+                                <img src="@img.ImagePath"
+                                     alt="Miniaturka ogłoszenia"
+                                     class="img-thumbnail bg-dark border-secondary h-100 w-100 @(img.IsMain ? "border-primary" : "")"
+                                     style="object-fit: cover;"
+                                     onclick="changeMainImage('@img.ImagePath', this)" />
+                            </div>
+                        }
+                    </div>
+                }
             </div>
 
             <div class="card-body">
@@ -238,3 +257,18 @@
     </div>
 
 </div>
+
+<script>
+    function changeMainImage(imagePath, thumbnailElement) {
+        const mainImg = document.getElementById('currentMainImage');
+        if (mainImg) {
+            mainImg.src = imagePath;
+        }
+
+        document.querySelectorAll('.gallery-thumbnail-wrapper img').forEach(img => {
+            img.classList.remove('border-primary');
+        });
+
+        thumbnailElement.classList.add('border-primary');
+    }
+</script>

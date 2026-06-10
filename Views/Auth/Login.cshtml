@@ -1,54 +1,91 @@
 ﻿@{
-    ViewData["Title"] = "Logowanie";
+    ViewData["Title"] = "Konto";
 }
 
+<div class="auth-wrapper">
+    <div class="auth-card">
 
-<div class="auth-card">
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('login')">Logowanie</div>
+            <div class="tab" onclick="showTab('register')">Rejestracja</div>
+        </div>
 
+        <form class="form active" id="login" method="post" action="/Auth/Login">
+            <div class="form-group">
+                <label for="login-username">Login</label>
+                <input type="text" id="login-username" name="username" class="form-control form-control-dark" placeholder="Wprowadź login" required />
+            </div>
 
-    <!-- TABS -->
-    <div class="tabs">
-        <div class="tab active" onclick="showTab('login')">Logowanie</div>
-        <div class="tab" onclick="showTab('register')">Rejestracja</div>
+            <div class="form-group">
+                <label for="login-password">Hasło</label>
+                <input type="password" id="login-password" name="password" class="form-control form-control-dark" placeholder="Wprowadź hasło" required />
+            </div>
+
+            <button type="submit" class="btn-primary-custom w-100">Zaloguj się</button>
+        </form>
+
+        <form class="form" id="register" method="post" action="/Auth/Register">
+
+            <div class="form-group">
+                <label for="reg-login">Login</label>
+                <input type="text" id="reg-login" name="Login" class="form-control form-control-dark" placeholder="Twój unikalny login" required />
+            </div>
+
+            <div class="form-group">
+                <label for="reg-email">Adres E-mail</label>
+                <input type="email" id="reg-email" name="Email" class="form-control form-control-dark" placeholder="np. jan@kowalski.pl" required />
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="reg-pass">Hasło</label>
+                    <input type="password" id="reg-pass" name="Password" class="form-control form-control-dark" placeholder="Hasło" required />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="reg-confpass">Powtórz hasło</label>
+                    <input type="password" id="reg-confpass" name="ConfirmPassword" class="form-control form-control-dark" placeholder="Powtórz" required />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="reg-fname">Imię</label>
+                    <input type="text" id="reg-fname" name="FirstName" class="form-control form-control-dark" placeholder="Imię" required />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="reg-lname">Nazwisko</label>
+                    <input type="text" id="reg-lname" name="LastName" class="form-control form-control-dark" placeholder="Nazwisko" required />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="reg-loc">Lokalizacja</label>
+                    <input type="text" id="reg-loc" name="Location" class="form-control form-control-dark" placeholder="np. Warszawa" required />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="reg-phone">Numer telefonu</label>
+                    <input type="tel" id="reg-phone" name="TelephoneNumber" class="form-control form-control-dark" placeholder="Telefon" required />
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary-custom w-100">Utwórz konto</button>
+        </form>
+
     </div>
-
-
-    <!-- LOGIN -->
-    <form class="form active" id="login" method="post" action="/Auth/Login">
-        <input type="text" name="username" placeholder="Login" required />
-        <input type="password" name="password" placeholder="Hasło" required />
-        <button type="submit" class="btn-primary-custom">Zaloguj</button>
-    </form>
-
-
-    <!-- REGISTER -->
-    <form class="form" id="register" method="post" action="/Auth/Register">
-        <input type="text" name="Login" placeholder="Login" required />
-        <input type="email" name="Email" placeholder="Email" required />
-        <input type="password" name="Password" placeholder="Hasło" required />
-        <input type="password" name="ConfirmPassword" placeholder="Powtórz hasło" required />
-        <input type="text" name="FirstName" placeholder="Imię" required />
-        <input type="text" name="LastName" placeholder="Nazwisko" required />
-        <input type="text" name="Location" placeholder="Lokalizacja" required />
-        <input type="tel" name="TelephoneNumber" placeholder="Numer telefonu" required />
-        <button type="submit" class="btn-primary-custom">
-            Zarejestruj
-        </button>
-    </form>
-
-
 </div>
-
 
 @section Scripts {
     <script>
-        function showTab(tab) {
+        function showTab(tabId) {
+            // Ukryj/pokaż formularze
             document.querySelectorAll(".form").forEach(f => f.classList.remove("active"));
-            document.getElementById(tab).classList.add("active");
+            document.getElementById(tabId).classList.add("active");
 
+            // Przełącz klasę active na tabach na podstawie klikniętego elementu
             document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
 
-            if (tab === "login") {
+            if (tabId === "login") {
                 document.querySelectorAll(".tab")[0].classList.add("active");
             } else {
                 document.querySelectorAll(".tab")[1].classList.add("active");

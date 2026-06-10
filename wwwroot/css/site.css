@@ -388,3 +388,89 @@ html {
     .history-row small {
         color: #999;
     }
+
+
+/* --- Sekcja Logowania i Rejestracji (Auth) --- */
+
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 160px);
+    padding: 1.5rem 1rem 3rem;
+}
+
+.auth-card {
+    background-color: var(--surface-color);
+    border: 1px solid #333;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 480px;
+    padding: 2rem;
+    transition: border-color 0.3s ease;
+}
+
+    .auth-card .tabs {
+        display: flex;
+        border-bottom: 2px solid #333;
+        margin-bottom: 2rem;
+    }
+
+    .auth-card .tab {
+        flex: 1;
+        text-align: center;
+        padding: 0.75rem;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--text-secondary);
+        transition: color 0.2s ease, border-color 0.2s ease;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+    }
+
+        .auth-card .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .auth-card .tab.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+    .auth-card .form {
+        display: none;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+        .auth-card .form.active {
+            display: flex;
+        }
+
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+}
+
+    .form-group:last-child {
+        margin-bottom: 0;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+
+
+.auth-card .btn-primary-custom {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    margin-top: 2rem;
+}

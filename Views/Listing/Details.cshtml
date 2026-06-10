@@ -167,12 +167,12 @@
                                 Szczegóły
                             </h4>
 
-                            <table class="table table-dark table-bordered mb-0">
+                            <table class="table table-default mb-0">
                                 @foreach (var pv in Model.ParameterValues)
                                 {
                                     <tr>
-                                        <td class="text-muted w-50">@pv.CategoryParameter.Name</td>
-                                        <td>
+                                        <td style="color: var(--text-primary);" class="w-50">@pv.CategoryParameter.Name</td>
+                                        <td style="color: var(--text-primary);">
                                             @if (pv.CategoryParameter.Type == TradeNest.Models.ParameterType.Boolean)
                                             {
                                                 @(pv.Value.ToLower() == "true" ? "Tak" : "Nie")
@@ -402,12 +402,12 @@
                                 Szczegóły
                             </h4>
 
-                            <table class="table table-dark table-bordered mb-0">
+                            <table class="table table-default mb-0">
                                 @foreach (var pv in Model.ParameterValues)
                                 {
                                     <tr>
-                                        <td class="text-muted w-50">@pv.CategoryParameter.Name</td>
-                                        <td>
+                                        <td style="color: var(--text-primary);" class="w-50">@pv.CategoryParameter.Name</td>
+                                        <td style="color: var(--text-primary);">
                                             @if (pv.CategoryParameter.Type == TradeNest.Models.ParameterType.Boolean)
                                             {
                                                 @(pv.Value.ToLower() == "true" ? "Tak" : "Nie")

@@ -27,236 +27,476 @@
     </div>
 </div>
 
-<div class="row g-4">
 
-    <div class="col-lg-8">
+@if (Model.IsPromoted)
+{
+    <div class="row g-4">
 
-        <div class="listing-card">
+        <div class="col-lg-8">
 
-            <div class="mb-3 text-center bg-dark rounded d-flex justify-content-center align-items-center details-listing-img-wrapper" style="position: relative;">
+            <div class="promoted-listing-card-details">
 
-                @if (mainImage != null)
-                {
-                    <img src="@mainImage.ImagePath"
-                         alt="@Model.Title"
-                         class="img-fluid details-listing-img" id="currentMainImage" 
-                         style="height: 500px;"/>;
-                }
-                else
-                {
-                    <div class="w-100 d-flex align-items-center justify-content-center details-no-image-wrapper">
-                        <i class="bi bi-image text-muted details-no-image-icon"></i>
-                    </div>
-                }
-                <button class="watchlist-btn">
-                    <i class="bi bi-heart"></i>
-                </button>
+                <div class="mb-3 text-center bg-dark rounded d-flex justify-content-center align-items-center details-listing-img-wrapper" style="position: relative;">
 
-            </div>
-
-            <div class="mb-3 text-center rounded d-flex justify-content-center align-items-center" style="position: relative;">
-                @if (Model.Images != null && Model.Images.Count > 0)
-                {
-                    <div class="d-flex gap-2 pb-2 mb-4 listing-gallery-scroll" style="overflow-x: auto; white-space: nowrap; scroll-behavior: smooth;">
-                        @foreach (var img in Model.Images.OrderByDescending(x => x.IsMain))
-                        {
-                            <div class="gallery-thumbnail-wrapper" style="flex: 0 0 auto; width: 100px; height: 75px; cursor: pointer;">
-                                <img src="@img.ImagePath"
-                                     alt="Miniaturka ogłoszenia"
-                                     class="img-thumbnail bg-dark border-secondary h-100 w-100 @(img.IsMain ? "border-primary" : "")"
-                                     style="object-fit: cover;"
-                                     onclick="changeMainImage('@img.ImagePath', this)" />
-                            </div>
-                        }
-                    </div>
-                }
-            </div>
-
-            <div class="card-body">
-
-                <div class="mb-4">
-
-                    <h1 class="mb-3">
-                        @Model.Title
-                    </h1>
-
-                    <div class="d-flex flex-wrap gap-3 text-muted">
-
-                        <span>
-                            <i class="bi bi-tag me-1"></i>
-                            @Model.Category.Name
-                        </span>
-
-                        <span>
-                            <i class="bi bi-geo-alt me-1"></i>
-                            @Model.Location
-                        </span>
-
-                        <span>
-                            <i class="bi bi-calendar me-1"></i>
-                            @if (Model.CreatedAt.Date == DateTime.Now.Date)
-                            {
-                                @("Dzisiaj o " + Model.CreatedAt.ToString("HH:mm"))
-                            }
-                            else if (Model.CreatedAt.Date == DateTime.Now.Date.AddDays(-1))
-                            {
-                                @("Wczoraj o " + Model.CreatedAt.ToString("HH:mm"))
-                            }
-                            else
-                            {
-                                @Model.CreatedAt.ToString("dd.MM.yyyy 'o' HH:mm")
-                            }
-                        </span>
-
-                    </div>
+                    @if (mainImage != null)
+                    {
+                        <img src="@mainImage.ImagePath"
+                             alt="@Model.Title"
+                             class="img-fluid details-listing-img" id="currentMainImage"
+                             style="height: 500px;" />
+                        ;
+                    }
+                    else
+                    {
+                        <div class="w-100 d-flex align-items-center justify-content-center details-no-image-wrapper">
+                            <i class="bi bi-image text-muted details-no-image-icon"></i>
+                        </div>
+                    }
+                    <button class="watchlist-btn">
+                        <i class="bi bi-heart"></i>
+                    </button>
 
                 </div>
 
-                @* Cena + historia ceny *@
-                <div class="d-flex align-items-center gap-2">
+                <div class="mb-3 text-center rounded d-flex justify-content-center align-items-center" style="position: relative;">
+                    @if (Model.Images != null && Model.Images.Count > 0)
+                    {
+                        <div class="d-flex gap-2 pb-2 mb-4 listing-gallery-scroll" style="overflow-x: auto; white-space: nowrap; scroll-behavior: smooth;">
+                            @foreach (var img in Model.Images.OrderByDescending(x => x.IsMain))
+                            {
+                                <div class="gallery-thumbnail-wrapper" style="flex: 0 0 auto; width: 100px; height: 75px; cursor: pointer;">
+                                    <img src="@img.ImagePath"
+                                         alt="Miniaturka ogłoszenia"
+                                         class="img-thumbnail bg-dark border-secondary h-100 w-100 @(img.IsMain ? "border-primary" : "")"
+                                         style="object-fit: cover;"
+                                         onclick="changeMainImage('@img.ImagePath', this)" />
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
 
-                    <div class="card-price fs-2">
-                        @(price?.ToString("0.##")) zł
+                <div class="card-body">
+
+                    <div class="mb-4">
+
+                        <h1 class="mb-3">
+                            @Model.Title
+                        </h1>
+
+                        <div class="d-flex flex-wrap gap-3 text-muted">
+
+                            <span>
+                                <i class="bi bi-tag me-1"></i>
+                                @Model.Category.Name
+                            </span>
+
+                            <span>
+                                <i class="bi bi-geo-alt me-1"></i>
+                                @Model.Location
+                            </span>
+
+                            <span>
+                                <i class="bi bi-calendar me-1"></i>
+                                @if (Model.CreatedAt.Date == DateTime.Now.Date)
+                                {
+                                    @("Dzisiaj o " + Model.CreatedAt.ToString("HH:mm"))
+                                }
+                                else if (Model.CreatedAt.Date == DateTime.Now.Date.AddDays(-1))
+                                {
+                                    @("Wczoraj o " + Model.CreatedAt.ToString("HH:mm"))
+                                }
+                                else
+                                {
+                                    @Model.CreatedAt.ToString("dd.MM.yyyy 'o' HH:mm")
+                                }
+                            </span>
+
+                        </div>
+
                     </div>
 
-                    @if (Model.Prices.Count > 1)
-                    {
-                        <div class="price-history-wrapper">
+                    @* Cena + historia ceny *@
+                    <div class="d-flex align-items-center gap-2">
 
-                            <i class="bi bi-clock-history price-history-icon"></i>
+                        <div class="card-price fs-2">
+                            @(price?.ToString("0.##")) zł
+                        </div>
 
-                            <div class="price-history-tooltip">
+                        @if (Model.Prices.Count > 1)
+                        {
+                            <div class="price-history-wrapper">
 
-                                @foreach (var p in Model.Prices.OrderByDescending(x => x.SetAt))
-                                {
-                                    <div class="history-row">
-                                        <span>@p.Price.ToString("N0") zł</span>
-                                        <small>@p.SetAt.ToString("dd.MM.yyyy HH:mm")</small>
-                                    </div>
-                                }
+                                <i class="bi bi-clock-history price-history-icon"></i>
+
+                                <div class="price-history-tooltip">
+
+                                    @foreach (var p in Model.Prices.OrderByDescending(x => x.SetAt))
+                                    {
+                                        <div class="history-row">
+                                            <span>@p.Price.ToString("N0") zł</span>
+                                            <small>@p.SetAt.ToString("dd.MM.yyyy HH:mm")</small>
+                                        </div>
+                                    }
+
+                                </div>
 
                             </div>
+                        }
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <h4 class="section-title mb-3">
+                            Opis
+                        </h4>
+
+                        <p class="mb-0">
+                            @Model.Description
+                        </p>
+
+                    </div>
+
+                    @if (Model.ParameterValues.Any())
+                    {
+                        <div class="mb-3">
+
+                            <h4 class="section-title mb-3">
+                                Szczegóły
+                            </h4>
+
+                            <table class="table table-dark table-bordered mb-0">
+                                @foreach (var pv in Model.ParameterValues)
+                                {
+                                    <tr>
+                                        <td class="text-muted w-50">@pv.CategoryParameter.Name</td>
+                                        <td>
+                                            @if (pv.CategoryParameter.Type == TradeNest.Models.ParameterType.Boolean)
+                                            {
+                                                @(pv.Value.ToLower() == "true" ? "Tak" : "Nie")
+                                            }
+                                            else
+                                            {
+                                                @pv.Value
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
 
                         </div>
                     }
 
                 </div>
 
+            </div>
 
-                <div class="mb-3">
+        </div>
 
-                    <h4 class="section-title mb-3">
-                        Opis
-                    </h4>
+        <div class="col-lg-4">
 
-                    <p class="mb-0">
-                        @Model.Description
-                    </p>
+            <div class="filter-panel">
+
+                <h5 class="section-title">
+                    Sprzedający
+                </h5>
+
+                <div class="d-flex align-items-center gap-3 mb-4">
+
+                    <div class="category-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                    <div>
+
+                        <div>
+                            @Model.Owner.Login
+                        </div>
+
+                        <div class="text-muted">
+                            ID użytkownika: @Model.OwnerId
+                        </div>
+
+                    </div>
 
                 </div>
 
-                @if (Model.ParameterValues.Any())
-                {
+                <button class="btn btn-primary-custom w-100 mb-2">
+                    Napisz wiadomość
+                </button>
+
+                <button class="btn btn-secondary-custom w-100">
+                    Zgłoś ogłoszenie
+                </button>
+
+            </div>
+
+            <div class="filter-panel mt-3">
+
+                <h5 class="section-title mb-3">
+                    Zarządzanie ogłoszeniem
+                </h5>
+
+                <div class="d-grid gap-2">
+
+                    <form method="get" action="/Listing/Edit/@Model.Id">
+                        <button type="submit" class="btn btn-primary-custom w-100">
+                            Edytuj
+                        </button>
+                    </form>
+
+                    <form method="post" action="/Listing/Delete">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-secondary-custom w-100">
+                            Usuń
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+@if(Model.IsPromoted == false)
+{
+    <div class="row g-4">
+
+        <div class="col-lg-8">
+
+            <div class="listing-card-details">
+
+                <div class="mb-3 text-center bg-dark rounded d-flex justify-content-center align-items-center details-listing-img-wrapper" style="position: relative;">
+
+                    @if (mainImage != null)
+                    {
+                        <img src="@mainImage.ImagePath"
+                             alt="@Model.Title"
+                             class="img-fluid details-listing-img" id="currentMainImage"
+                             style="height: 500px;" />
+                        ;
+                    }
+                    else
+                    {
+                        <div class="w-100 d-flex align-items-center justify-content-center details-no-image-wrapper">
+                            <i class="bi bi-image text-muted details-no-image-icon"></i>
+                        </div>
+                    }
+                    <button class="watchlist-btn">
+                        <i class="bi bi-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="mb-3 text-center rounded d-flex justify-content-center align-items-center" style="position: relative;">
+                    @if (Model.Images != null && Model.Images.Count > 0)
+                    {
+                        <div class="d-flex gap-2 pb-2 mb-4 listing-gallery-scroll" style="overflow-x: auto; white-space: nowrap; scroll-behavior: smooth;">
+                            @foreach (var img in Model.Images.OrderByDescending(x => x.IsMain))
+                            {
+                                <div class="gallery-thumbnail-wrapper" style="flex: 0 0 auto; width: 100px; height: 75px; cursor: pointer;">
+                                    <img src="@img.ImagePath"
+                                         alt="Miniaturka ogłoszenia"
+                                         class="img-thumbnail bg-dark border-secondary h-100 w-100 @(img.IsMain ? "border-primary" : "")"
+                                         style="object-fit: cover;"
+                                         onclick="changeMainImage('@img.ImagePath', this)" />
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <div class="card-body">
+
+                    <div class="mb-4">
+
+                        <h1 class="mb-3">
+                            @Model.Title
+                        </h1>
+
+                        <div class="d-flex flex-wrap gap-3 text-muted">
+
+                            <span>
+                                <i class="bi bi-tag me-1"></i>
+                                @Model.Category.Name
+                            </span>
+
+                            <span>
+                                <i class="bi bi-geo-alt me-1"></i>
+                                @Model.Location
+                            </span>
+
+                            <span>
+                                <i class="bi bi-calendar me-1"></i>
+                                @if (Model.CreatedAt.Date == DateTime.Now.Date)
+                                {
+                                    @("Dzisiaj o " + Model.CreatedAt.ToString("HH:mm"))
+                                }
+                                else if (Model.CreatedAt.Date == DateTime.Now.Date.AddDays(-1))
+                                {
+                                    @("Wczoraj o " + Model.CreatedAt.ToString("HH:mm"))
+                                }
+                                else
+                                {
+                                    @Model.CreatedAt.ToString("dd.MM.yyyy 'o' HH:mm")
+                                }
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    @* Cena + historia ceny *@
+                    <div class="d-flex align-items-center gap-2">
+
+                        <div class="card-price fs-2">
+                            @(price?.ToString("0.##")) zł
+                        </div>
+
+                        @if (Model.Prices.Count > 1)
+                        {
+                            <div class="price-history-wrapper">
+
+                                <i class="bi bi-clock-history price-history-icon"></i>
+
+                                <div class="price-history-tooltip">
+
+                                    @foreach (var p in Model.Prices.OrderByDescending(x => x.SetAt))
+                                    {
+                                        <div class="history-row">
+                                            <span>@p.Price.ToString("N0") zł</span>
+                                            <small>@p.SetAt.ToString("dd.MM.yyyy HH:mm")</small>
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+
                     <div class="mb-3">
 
                         <h4 class="section-title mb-3">
-                            Szczegóły
+                            Opis
                         </h4>
 
-                        <table class="table table-dark table-bordered mb-0">
-                            @foreach (var pv in Model.ParameterValues)
-                            {
-                                <tr>
-                                    <td class="text-muted w-50">@pv.CategoryParameter.Name</td>
-                                    <td>
-                                        @if (pv.CategoryParameter.Type == TradeNest.Models.ParameterType.Boolean)
-                                        {
-                                            @(pv.Value.ToLower() == "true" ? "Tak" : "Nie")
-                                        }
-                                        else
-                                        {
-                                            @pv.Value
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </table>
+                        <p class="mb-0">
+                            @Model.Description
+                        </p>
 
                     </div>
-                }
+
+                    @if (Model.ParameterValues.Any())
+                    {
+                        <div class="mb-3">
+
+                            <h4 class="section-title mb-3">
+                                Szczegóły
+                            </h4>
+
+                            <table class="table table-dark table-bordered mb-0">
+                                @foreach (var pv in Model.ParameterValues)
+                                {
+                                    <tr>
+                                        <td class="text-muted w-50">@pv.CategoryParameter.Name</td>
+                                        <td>
+                                            @if (pv.CategoryParameter.Type == TradeNest.Models.ParameterType.Boolean)
+                                            {
+                                                @(pv.Value.ToLower() == "true" ? "Tak" : "Nie")
+                                            }
+                                            else
+                                            {
+                                                @pv.Value
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+
+                        </div>
+                    }
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+        <div class="col-lg-4">
 
-    <div class="col-lg-4">
+            <div class="filter-panel">
 
-        <div class="filter-panel">
+                <h5 class="section-title">
+                    Sprzedający
+                </h5>
 
-            <h5 class="section-title">
-                Sprzedający
-            </h5>
+                <div class="d-flex align-items-center gap-3 mb-4">
 
-            <div class="d-flex align-items-center gap-3 mb-4">
-
-                <div class="category-icon">
-                    <i class="bi bi-person"></i>
-                </div>
-
-                <div>
+                    <div class="category-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
 
                     <div>
-                        @Model.Owner.Login
-                    </div>
 
-                    <div class="text-muted">
-                        ID użytkownika: @Model.OwnerId
+                        <div>
+                            @Model.Owner.Login
+                        </div>
+
+                        <div class="text-muted">
+                            ID użytkownika: @Model.OwnerId
+                        </div>
+
                     </div>
 
                 </div>
 
+                <button class="btn btn-primary-custom w-100 mb-2">
+                    Napisz wiadomość
+                </button>
+
+                <button class="btn btn-secondary-custom w-100">
+                    Zgłoś ogłoszenie
+                </button>
+
             </div>
 
-            <button class="btn btn-primary-custom w-100 mb-2">
-                Napisz wiadomość
-            </button>
+            <div class="filter-panel mt-3">
 
-            <button class="btn btn-secondary-custom w-100">
-                Zgłoś ogłoszenie
-            </button>
+                <h5 class="section-title mb-3">
+                    Zarządzanie ogłoszeniem
+                </h5>
 
-        </div>
+                <div class="d-grid gap-2">
 
-        <div class="filter-panel mt-3">
+                    <form method="get" action="/Listing/Edit/@Model.Id">
+                        <button type="submit" class="btn btn-primary-custom w-100">
+                            Edytuj
+                        </button>
+                    </form>
 
-            <h5 class="section-title mb-3">
-                Zarządzanie ogłoszeniem
-            </h5>
+                    <form method="post" action="/Listing/Delete">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-secondary-custom w-100">
+                            Usuń
+                        </button>
+                    </form>
 
-            <div class="d-grid gap-2">
-
-                <form method="get" action="/Listing/Edit/@Model.Id">
-                    <button type="submit" class="btn btn-primary-custom w-100">
-                        Edytuj
-                    </button>
-                </form>
-
-                <form method="post" action="/Listing/Delete">
-                    <input type="hidden" name="id" value="@Model.Id" />
-                    <button type="submit" class="btn btn-secondary-custom w-100">
-                        Usuń
-                    </button>
-                </form>
+                </div>
 
             </div>
 
         </div>
 
     </div>
-
-</div>
+}
 
 <script>
     function changeMainImage(imagePath, thumbnailElement) {

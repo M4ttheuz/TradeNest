@@ -1,16 +1,16 @@
 ﻿@model TradeNest.Models.Listing
 
 @{
-    ViewData["Title"] = "Edytuj ogłoszenia";
+    ViewData["Title"] = "Edytuj ogłoszenie";
 }
 
 <div class="filter-panel">
+    <h1 class="mb-4">Edytuj ogłoszenie</h1>
 
-    <h1 class="mb-4">Edytuj ogłoszenia</h1>
-
-    <form method="post">
-
+    <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="@Model.Id" />
+
+        <div id="deleted-images-container"></div>
 
         <div class="filter-group">
             <label class="filter-label">Tytuł</label>
@@ -41,46 +41,70 @@
 
         <hr />
 
+        <h4 class="mb-3">Zarządzanie zdjęciami</h4>
+        
+        <div class="row g-3 mb-4">
+            @foreach (var img in Model.Images)
+            {
+                <div class="col-6 col-sm-4 col-md-3 image-card-wrapper" id="img-card-@img.Id">
+                    <div class="position-relative border rounded p-1 bg-dark">
+                        <img src="@img.ImagePath" class="img-fluid rounded" style="height: 120px; width: 100%; object-fit: cover;" />
+                        
+                        <div class="mt-2 text-center">
+                            @if (img.IsMain)
+                            {
+                                <span class="badge bg-success w-100 mb-1">Główne</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary w-100 mb-1">Dodatkowe</span>
+                            }
+                            <button type="button" class="btn btn-danger btn-sm w-100" onclick="markImageAsDeleted(@img.Id)">
+                                <i class="bi bi-trash"></i> Usuń
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Zmień / Dodaj zdjęcie główne <small class="text-muted">(Zastąpi obecne główne)</small></label>
+            <input type="file" name="newMainImage" class="form-control form-control-dark" accept="image/*" />
+        </div>
+
+        <div class="filter-group mt-3">
+            <label class="filter-label">Dodaj kolejne zdjęcia do galerii</label>
+            <input type="file" name="newAdditionalImages" class="form-control form-control-dark" accept="image/*" multiple />
+        </div>
+        <hr />
+
         @foreach (TradeNest.Models.ListingParameterValue parameter in Model.ParameterValues)
         {
             <div class="filter-group">
-
-                <label class="filter-label">
-                    @parameter.CategoryParameter.Name
-                </label>
-
+                <label class="filter-label">@parameter.CategoryParameter.Name</label>
                 <input type="hidden" name="parameterValueIds" value="@parameter.Id" />
 
                 @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Text)
                 {
                     <input type="text" name="parameterValues" value="@parameter.Value" class="form-control form-control-dark" />
                 }
-
                 @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Number)
                 {
                     <input type="number" name="parameterValues" value="@parameter.Value" class="form-control form-control-dark" />
                 }
-
                 @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Date)
                 {
                     <input type="date" name="parameterValues" value="@parameter.Value" class="form-control form-control-dark" />
                 }
-
                 @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Boolean)
                 {
                     <div class="form-check">
                         <input type="hidden" name="parameterValues" value="false" />
-
-                        <input type="checkbox"
-                               name="parameterValues"
-                               value="true"
-                               class="form-check-input"
-                               @(parameter.Value == "true" ? "checked" : "") />
-
+                        <input type="checkbox" name="parameterValues" value="true" class="form-check-input" @(parameter.Value == "true" ? "checked" : "") />
                         <label class="form-check-label">Tak</label>
                     </div>
                 }
-
             </div>
         }
 
@@ -88,21 +112,28 @@
         <div class="form-check mt-3">
             <input type="hidden" name="promote" value="false" />
             <input type="checkbox" class="form-check-input" name="promote" value="true" id="promote" />
-            <label class="form-check-label" for="promote">
-                Promuj ogłoszenie przez 7 dni
-            </label>
+            <label class="form-check-label" for="promote">Promuj ogłoszenie przez 7 dni</label>
         </div>
         @if (Model.IsPromoted && Model.PromotionEndDate > DateTime.Now)
         {
-            <small class="text-muted">
-                Aktualnie promowane do: @Model.PromotionEndDate.ToString("dd.MM.yyyy HH:mm")
-            </small>
+            <small class="text-muted">Aktualnie promowane do: @Model.PromotionEndDate.ToString("dd.MM.yyyy HH:mm")</small>
         }
 
-        <button type="submit" class="btn btn-primary-custom w-100 mt-3">
-            Zapisz
-        </button>
-
+        <button type="submit" class="btn btn-primary-custom w-100 mt-3">Zapisz</button>
     </form>
-
 </div>
+
+<script>
+    function markImageAsDeleted(imageId) {
+        if (confirm("Czy na pewno chcesz usunąć to zdjęcie? Zmiana zostanie zapisana po kliknięciu 'Zapisz'.")) {
+            document.getElementById(`img-card-${imageId}`).remove();
+
+            const container = document.getElementById('deleted-images-container');
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'deletedImageIds';
+            input.value = imageId;
+            container.appendChild(input);
+        }
+    }
+</script>

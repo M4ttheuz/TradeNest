@@ -178,14 +178,98 @@ namespace TradeNest.Controllers
         }
 
         [HttpPost]
-        [HttpPost]
-        public IActionResult Edit(int id, string title, string description, double price, string location, List<int> parameterValueIds, List<string> parameterValues)
+        public async Task<IActionResult> Edit(
+            int id,
+            string title,
+            string description,
+            double price,
+            string location,
+            List<int> parameterValueIds,
+            List<string> parameterValues,
+            List<int> deletedImageIds,
+            IFormFile? newMainImage,
+            List<IFormFile> newAdditionalImages)
         {
             Listing? listing = _context.Listings
+                .Include(x => x.Category)
+                .Include(x => x.Category.Parameters)
                 .Include(x => x.ParameterValues)
+                .ThenInclude(x => x.CategoryParameter)
                 .Include(x => x.Prices)
+                .Include(x => x.Images)
                 .FirstOrDefault(x => x.Id == id);
+
             if (listing == null) return RedirectToAction("Index");
+
+            // Usuwanie zdjęć
+            if (deletedImageIds != null && deletedImageIds.Count > 0)
+            {
+                foreach (int imgId in deletedImageIds)
+                {
+                    var imgToDelete = listing.Images.FirstOrDefault(x => x.Id == imgId);
+                    if (imgToDelete != null)
+                    {
+                        string physicalPath = Path.Combine(_webHostEnvironment.WebRootPath, imgToDelete.ImagePath.TrimStart('/'));
+
+                        if (System.IO.File.Exists(physicalPath))
+                        {
+                            System.IO.File.Delete(physicalPath);
+                        }
+
+                        _context.ListingImages.Remove(imgToDelete);
+                    }
+                }
+            }
+
+            // Zdjęcie główne
+            if (newMainImage != null && newMainImage.Length > 0)
+            {
+                var oldMainImage = listing.Images.FirstOrDefault(x => x.IsMain);
+                if (oldMainImage != null)
+                {
+                    oldMainImage.IsMain = false;
+                }
+
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(newMainImage.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await newMainImage.CopyToAsync(fileStream);
+                }
+
+                listing.Images.Add(new ListingImage
+                {
+                    ImagePath = "/images/" + uniqueFileName,
+                    IsMain = true
+                });
+            }
+
+            // Zdjęcia dodatkowe
+            if (newAdditionalImages != null && newAdditionalImages.Count > 0)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                foreach (var image in newAdditionalImages)
+                {
+                    if (image.Length > 0)
+                    {
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(image.FileName);
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await image.CopyToAsync(fileStream);
+                        }
+
+                        listing.Images.Add(new ListingImage
+                        {
+                            ImagePath = "/images/" + uniqueFileName,
+                            IsMain = false
+                        });
+                    }
+                }
+            }
 
             bool promote = Request.Form["promote"].Contains("true");
             if (promote)
@@ -215,8 +299,10 @@ namespace TradeNest.Controllers
                 if (parameter == null) continue;
                 parameter.Value = parameterValues[i];
             }
+
             _context.SaveChanges();
-            return RedirectToAction("Details", "Listing", new { id = listing.Id });
+            if (listing == null) return RedirectToAction("Index");
+            return View(listing);
         }
 
         public IActionResult Details(int id)

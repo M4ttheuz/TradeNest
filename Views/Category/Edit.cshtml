@@ -1,0 +1,36 @@
+﻿@using TradeNest.Models
+
+@{
+    ViewData["Title"] = "Edytowanie kategorii";
+}
+
+<div class="filter-panel">
+
+    <h1 class="mb-4">Edycja kategorii</h1>
+
+    <form id="editCategoryForm" method="post">
+        <input type="hidden" id="categoryId" name="categoryId" value="" />
+
+        <div class="filter-group">
+            <label class="filter-label">Nazwa kategorii</label>
+            <input type="text" id="categoryName" name="categoryName" class="form-control form-control-dark" />
+        </div>
+
+        <hr />
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0">Parametry</h3>
+
+            <button type="button" onclick="addParameter()" class="btn btn-primary-custom">
+                Dodaj parametr
+            </button>
+        </div>
+
+        <div id="parameters"></div>
+
+        <button type="submit" class="btn btn-primary-custom w-100 mt-3">
+            Zapisz zmiany
+        </button>
+
+    </form>
+</div>

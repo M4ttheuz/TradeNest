@@ -19,6 +19,12 @@ namespace TradeNest.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Edit()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult Create(string categoryName, 
             List<string> parameterNames, 

@@ -25,7 +25,9 @@ namespace TradeNest.Controllers
                 .Include(x => x.Prices)
                 .Include(x => x.Images)
                 .Include(x => x.ParameterValues)
-                .ThenInclude(x => x.CategoryParameter);
+                .ThenInclude(x => x.CategoryParameter)
+                .Include(x => x.Owner)
+                .ThenInclude(x => x.ReceivedReviews);
 
             List<Listing> listings = baseQuery
                 .OrderByDescending(x => x.CreatedAt)

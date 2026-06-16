@@ -54,7 +54,6 @@ namespace TradeNest.Controllers
                 Description = description,
                 CategoryId = categoryId,
                 Location = location,
-                OwnerId = 1,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 IsVisible = true,
@@ -62,6 +61,10 @@ namespace TradeNest.Controllers
                 IsPromoted = promote,
                 PromotionEndDate = promotionDate
             };
+
+            var id = HttpContext.Session.GetString("userId");
+            if (id == null) return RedirectToAction("Index", "Home");
+            listing.OwnerId = int.Parse(id);
 
             listing.Prices.Add(new ListingPrice
             {
@@ -302,7 +305,7 @@ namespace TradeNest.Controllers
 
             _context.SaveChanges();
             if (listing == null) return RedirectToAction("Index");
-            return View(listing);
+            return RedirectToAction("Details", "Listing", new { id = listing.Id });
         }
 
         public IActionResult Details(int id)

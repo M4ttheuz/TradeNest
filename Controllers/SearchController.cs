@@ -132,6 +132,8 @@ public class SearchController : Controller
                 .ThenInclude(c => c.Parameters)
             .Include(l => l.Prices)
             .Include(l => l.Images)
+            .Include(l => l.Owner)
+                .ThenInclude(o => o.ReceivedReviews)
             .AsNoTracking()
             .ToListAsync();
 

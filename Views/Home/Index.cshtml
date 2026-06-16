@@ -50,137 +50,6 @@
     </div>
 </div>
 
-<div class="row mb-5">
-    <div class="col-12">
-        <h4 class="section-title">Wyróżnione</h4>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            <div class="col">
-                <div class="listing-card promoted-listing-card">
-                    <div class="listing-img-wrapper">
-                        <div class="listing-no-image-wrapper">
-                            <i class="bi bi-image text-muted fs-1"></i>
-                        </div>
-                        <span class="promoted-badge">Promowane</span>
-                        <button class="watchlist-btn"><i class="bi bi-heart"></i></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">MacBook Pro 16" M2 Max 32GB 1TB</h5>
-                        <div class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                            <span class="text-muted ms-1">(42)</span>
-                        </div>
-                        <div class="card-price-row">
-                            <p class="card-price">10 450 zł</p>
-                            <div class="price-history" title="Cena spada">
-                                <i class="bi bi-graph-down-arrow"></i>
-                            </div>
-                        </div>
-                        <div class="card-footer-info">
-                            <span><i class="bi bi-geo-alt me-1"></i>Warszawa</span>
-                            <span>Dziś 14:30</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="listing-card promoted-listing-card">
-                    <div class="listing-img-wrapper">
-                        <div class="listing-no-image-wrapper">
-                            <i class="bi bi-image text-muted fs-1"></i>
-                        </div>
-                        <span class="promoted-badge">Promowane</span>
-                        <button class="watchlist-btn"><i class="bi bi-heart"></i></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">BMW Seria 3 G20 2021 M-Sport</h5>
-                        <div class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <span class="text-muted ms-1">(12)</span>
-                        </div>
-                        <div class="card-price-row">
-                            <p class="card-price">135 000 zł</p>
-                            <div class="price-history text-muted" title="Cena bez zmian">
-                                <i class="bi bi-dash"></i>
-                            </div>
-                        </div>
-                        <div class="card-footer-info">
-                            <span><i class="bi bi-geo-alt me-1"></i>Kraków</span>
-                            <span>Wczoraj</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="listing-card promoted-listing-card">
-                    <div class="listing-img-wrapper">
-                        <div class="listing-no-image-wrapper">
-                            <i class="bi bi-image text-muted fs-1"></i>
-                        </div>
-                        <span class="promoted-badge">Promowane</span>
-                        <button class="watchlist-btn"><i class="bi bi-heart-fill" style="color:var(--primary-color)"></i></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Aparat Sony A7IV Body</h5>
-                        <div class="rating-stars">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star"></i>
-                            <span class="text-muted ms-1">(8)</span>
-                        </div>
-                        <div class="card-price-row">
-                            <p class="card-price">8 100 zł</p>
-                            <div class="price-history" style="color:#ff5252" title="Cena rośnie">
-                                <i class="bi bi-graph-up-arrow"></i>
-                            </div>
-                        </div>
-                        <div class="card-footer-info">
-                            <span><i class="bi bi-geo-alt me-1"></i>Gdańsk</span>
-                            <span>Dziś 09:15</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="listing-card promoted-listing-card">
-                    <div class="listing-img-wrapper">
-                        <div class="listing-no-image-wrapper">
-                            <i class="bi bi-image text-muted fs-1"></i>
-                        </div>
-                        <span class="promoted-badge">Promowane</span>
-                        <button class="watchlist-btn"><i class="bi bi-heart"></i></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Mieszkanie 2 pok. Centrum</h5>
-                        <div class="rating-stars">
-                            <span class="text-muted fst-italic">Brak opinii</span>
-                        </div>
-                        <div class="card-price-row">
-                            <p class="card-price">420 zł</p>
-                        </div>
-                        <div class="card-footer-info">
-                            <span><i class="bi bi-geo-alt me-1"></i>Poznań</span>
-                            <span>2 dni temu</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 @if (promotedListings != null && promotedListings.Count > 0)
 {
     <div class="row mb-5">
@@ -192,6 +61,9 @@
                     var prices = listing.Prices.OrderByDescending(x => x.SetAt).ToList();
                     double? price = prices.ElementAtOrDefault(0)?.Price;
                     double? prevPrice = prices.ElementAtOrDefault(1)?.Price;
+
+                    var reviewsCount = listing.Owner.ReviewsCount;
+                    var averageRating = Math.Round((listing.Owner.AverageRating ?? 0) * 2, MidpointRounding.AwayFromZero) / 2;
 
                     <div class="col">
                         <a asp-controller="Listing"
@@ -224,7 +96,32 @@
                                 <div class="card-body">
                                     <h5 class="card-title">@listing.Title</h5>
                                     <div class="rating-stars">
-                                        <span class="text-muted fst-italic">Brak opinii</span>
+                                        @if (reviewsCount == 0)
+                                        {
+                                            <span class="text-muted fst-italic">Brak opinii</span>
+                                        }
+                                        else
+                                        {
+                                            var fullStars = (int)Math.Floor(averageRating);
+                                            var hasHalfStar = averageRating - fullStars >= 0.5;
+
+                                            @for (int i = 0; i < fullStars; i++)
+                                            {
+                                                <i class="bi bi-star-fill"></i>
+                                            }
+
+                                            @if (hasHalfStar)
+                                            {
+                                                <i class="bi bi-star-half"></i>
+                                            }
+
+                                            @for (int i = fullStars + (hasHalfStar ? 1 : 0); i < 5; i++)
+                                            {
+                                                <i class="bi bi-star"></i>
+                                            }
+
+                                            <span class="text-muted ms-1">(@reviewsCount)</span>
+                                        }
                                     </div>
                                     <div class="card-price-row">
                                         <p class="card-price">@(price?.ToString("0.##")) zł</p>
@@ -287,6 +184,9 @@
                 double? price = prices.ElementAtOrDefault(0)?.Price;
                 double? prevPrice = prices.ElementAtOrDefault(1)?.Price;
 
+                var reviewsCount = listing.Owner.ReviewsCount;
+                var averageRating = Math.Round((listing.Owner.AverageRating ?? 0) * 2, MidpointRounding.AwayFromZero) / 2;
+
                 <div class="col">
                     <a asp-controller="Listing"
                        asp-action="Details"
@@ -321,7 +221,32 @@
                             <div class="card-body">
                                 <h5 class="card-title">@listing.Title</h5>
                                 <div class="rating-stars">
-                                    <span class="text-muted fst-italic">Brak opinii</span>
+                                    @if (reviewsCount == 0)
+                                    {
+                                        <span class="text-muted fst-italic">Brak opinii</span>
+                                    }
+                                    else
+                                    {
+                                        var fullStars = (int)Math.Floor(averageRating);
+                                        var hasHalfStar = averageRating - fullStars >= 0.5;
+
+                                        @for (int i = 0; i < fullStars; i++)
+                                        {
+                                            <i class="bi bi-star-fill"></i>
+                                        }
+
+                                        @if (hasHalfStar)
+                                        {
+                                            <i class="bi bi-star-half"></i>
+                                        }
+
+                                        @for (int i = fullStars + (hasHalfStar ? 1 : 0); i < 5; i++)
+                                        {
+                                            <i class="bi bi-star"></i>
+                                        }
+
+                                        <span class="text-muted ms-1">(@reviewsCount)</span>
+                                    }
                                 </div>
                                 <div class="card-price-row">
                                     <p class="card-price">@(price?.ToString("0.##")) zł</p>

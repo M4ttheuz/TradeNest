@@ -49,7 +49,7 @@ namespace TradeNest.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Categories", "Admin");
         }
 
         [HttpGet]
@@ -114,7 +114,7 @@ namespace TradeNest.Controllers
             }
 
             _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Categories", "Admin");
         }
 
         [HttpPost]
@@ -130,7 +130,7 @@ namespace TradeNest.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Categories", "Admin");
         }
     }
 }

@@ -55,7 +55,7 @@ namespace TradeNest.Controllers
                 CategoryId = categoryId,
                 Location = location,
                 CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                UpdatedAt = null,
                 IsVisible = true,
                 IsApproved = true,
                 IsPromoted = promote,

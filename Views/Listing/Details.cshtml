@@ -115,7 +115,23 @@
                             {
                                 @Model.CreatedAt.ToString("dd.MM.yyyy 'o' HH:mm")
                             }
-                        </span>
+                            @if(Model.UpdatedAt != null)
+                            {
+                                @(" (zaktualizowano ")
+                                @if (Model.CreatedAt.Date == DateTime.Now.Date)
+                                {
+                                    @("dzisiaj o " + Model.UpdatedAt?.ToString("HH:mm"))
+                                }
+                                else if (Model.CreatedAt.Date == DateTime.Now.Date.AddDays(-1))
+                                {
+                                    @("wczoraj o " + Model.UpdatedAt?.ToString("HH:mm"))
+                                }
+                                else
+                                {
+                                    @Model.UpdatedAt?.ToString("dd.MM.yyyy 'o' HH:mm")
+                                }
+                                @(")")
+                            }
 
                     </div>
 

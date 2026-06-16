@@ -55,7 +55,7 @@ namespace TradeNest.Controllers
                 CategoryId = categoryId,
                 Location = location,
                 CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                UpdatedAt = null,
                 IsVisible = true,
                 IsApproved = true,
                 IsPromoted = promote,
@@ -188,6 +188,7 @@ namespace TradeNest.Controllers
             double price,
             string location,
             List<int> parameterValueIds,
+            List<int> categoryParameterIds,
             List<string> parameterValues,
             List<int> deletedImageIds,
             IFormFile? newMainImage,
@@ -197,7 +198,7 @@ namespace TradeNest.Controllers
                 .Include(x => x.Category)
                 .Include(x => x.Category.Parameters)
                 .Include(x => x.ParameterValues)
-                .ThenInclude(x => x.CategoryParameter)
+                    .ThenInclude(x => x.CategoryParameter)
                 .Include(x => x.Prices)
                 .Include(x => x.Images)
                 .FirstOrDefault(x => x.Id == id);
@@ -213,12 +214,8 @@ namespace TradeNest.Controllers
                     if (imgToDelete != null)
                     {
                         string physicalPath = Path.Combine(_webHostEnvironment.WebRootPath, imgToDelete.ImagePath.TrimStart('/'));
-
                         if (System.IO.File.Exists(physicalPath))
-                        {
                             System.IO.File.Delete(physicalPath);
-                        }
-
                         _context.ListingImages.Remove(imgToDelete);
                     }
                 }
@@ -229,18 +226,14 @@ namespace TradeNest.Controllers
             {
                 var oldMainImage = listing.Images.FirstOrDefault(x => x.IsMain);
                 if (oldMainImage != null)
-                {
                     oldMainImage.IsMain = false;
-                }
 
                 string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(newMainImage.FileName);
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
                     await newMainImage.CopyToAsync(fileStream);
-                }
 
                 listing.Images.Add(new ListingImage
                 {
@@ -261,9 +254,7 @@ namespace TradeNest.Controllers
                         string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                         using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
                             await image.CopyToAsync(fileStream);
-                        }
 
                         listing.Images.Add(new ListingImage
                         {
@@ -295,16 +286,31 @@ namespace TradeNest.Controllers
                 });
             }
 
-            for (int i = 0; i < parameterValueIds.Count; i++)
+            // Aktualizacja i dodawanie wartości parametrów
+            for (int i = 0; i < categoryParameterIds.Count; i++)
             {
-                ListingParameterValue? parameter = listing.ParameterValues
-                    .FirstOrDefault(x => x.Id == parameterValueIds[i]);
-                if (parameter == null) continue;
-                parameter.Value = parameterValues[i];
+                if (string.IsNullOrWhiteSpace(parameterValues[i])) continue;
+
+                if (parameterValueIds[i] == 0)
+                {
+                    // Nowy parametr — dodaj wpis
+                    listing.ParameterValues.Add(new ListingParameterValue
+                    {
+                        CategoryParameterId = categoryParameterIds[i],
+                        Value = parameterValues[i]
+                    });
+                }
+                else
+                {
+                    // Istniejący parametr — zaktualizuj wartość
+                    ListingParameterValue? existing = listing.ParameterValues
+                        .FirstOrDefault(x => x.Id == parameterValueIds[i]);
+                    if (existing != null)
+                        existing.Value = parameterValues[i];
+                }
             }
 
-            _context.SaveChanges();
-            if (listing == null) return RedirectToAction("Index");
+            await _context.SaveChangesAsync();
             return RedirectToAction("Details", "Listing", new { id = listing.Id });
         }
 

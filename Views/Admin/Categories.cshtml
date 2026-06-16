@@ -52,8 +52,13 @@
                     <td>@category.Id</td>
                     <td>@category.Name</td>
                     <td>
-                        <button class="btn btn-sm btn-info">Edytuj</button>
-                        <button class="btn btn-sm btn-danger">Usuń</button>
+                        <form method="get" action="/Category/Edit/@category.Id" style="display:inline-block">
+                            <button class="btn btn-sm btn-info">Edytuj</button>
+                        </form>
+
+                        <form method="post" action="/Category/Delete/@category.Id" style="display:inline-block">
+                            <button class="btn btn-sm btn-danger">Usuń</button>
+                        </form>
                     </td>
                 </tr>
             }

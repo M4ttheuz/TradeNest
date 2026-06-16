@@ -152,6 +152,25 @@ public class SearchController : Controller
 
         return View(listings);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> SearchByCategory(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return RedirectToAction("Index");
+
+        var categoryId = await _db.Categories
+            .AsNoTracking()
+            .Where(c => c.Name.ToLower().Contains(name.Trim().ToLower()))
+            .Select(c => (int?)c.Id)
+            .FirstOrDefaultAsync();
+
+        if (!categoryId.HasValue) return RedirectToAction("Index");
+
+        return RedirectToAction("Index", new
+        {
+            categoryId = categoryId.Value
+        });
+    }
 }
 
 public enum SortBy { Date, Price }

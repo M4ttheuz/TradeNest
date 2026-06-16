@@ -42,14 +42,13 @@
         <hr />
 
         <h4 class="mb-3">Zarządzanie zdjęciami</h4>
-        
+
         <div class="row g-3 mb-4">
             @foreach (var img in Model.Images)
             {
                 <div class="col-6 col-sm-4 col-md-3 image-card-wrapper" id="img-card-@img.Id">
                     <div class="position-relative border rounded p-1 bg-dark">
                         <img src="@img.ImagePath" class="img-fluid rounded" style="height: 120px; width: 100%; object-fit: cover;" />
-                        
                         <div class="mt-2 text-center">
                             @if (img.IsMain)
                             {
@@ -77,31 +76,48 @@
             <label class="filter-label">Dodaj kolejne zdjęcia do galerii</label>
             <input type="file" name="newAdditionalImages" class="form-control form-control-dark" accept="image/*" multiple />
         </div>
+
         <hr />
 
-        @foreach (TradeNest.Models.ListingParameterValue parameter in Model.ParameterValues)
+        @* Iterujemy po wszystkich parametrach kategorii *@
+        @foreach (TradeNest.Models.CategoryParameter parameter in Model.Category.Parameters)
         {
-            <div class="filter-group">
-                <label class="filter-label">@parameter.CategoryParameter.Name</label>
-                <input type="hidden" name="parameterValueIds" value="@parameter.Id" />
+            var existingValue = Model.ParameterValues.FirstOrDefault(x => x.CategoryParameterId == parameter.Id);
 
-                @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Text)
+            <div class="filter-group">
+                <label class="filter-label">@parameter.Name</label>
+
+                @* Id istniejącej wartości (0 jeśli nowa) *@
+                <input type="hidden" name="parameterValueIds" value="@(existingValue?.Id ?? 0)" />
+
+                @* Id parametru kategorii — zawsze potrzebne do zapisu *@
+                <input type="hidden" name="categoryParameterIds" value="@parameter.Id" />
+
+                @if (parameter.Type == TradeNest.Models.ParameterType.Text)
                 {
-                    <input type="text" name="parameterValues" value="@parameter.Value" class="form-control form-control-dark" />
+                    <input type="text" name="parameterValues"
+                           value="@(existingValue?.Value ?? "")"
+                           class="form-control form-control-dark" />
                 }
-                @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Number)
+                @if (parameter.Type == TradeNest.Models.ParameterType.Number)
                 {
-                    <input type="number" name="parameterValues" value="@parameter.Value" class="form-control form-control-dark" />
+                    <input type="number" name="parameterValues"
+                           value="@(existingValue?.Value ?? "")"
+                           class="form-control form-control-dark" />
                 }
-                @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Date)
+                @if (parameter.Type == TradeNest.Models.ParameterType.Date)
                 {
-                    <input type="date" name="parameterValues" value="@parameter.Value" class="form-control form-control-dark" />
+                    <input type="date" name="parameterValues"
+                           value="@(existingValue?.Value ?? "")"
+                           class="form-control form-control-dark" />
                 }
-                @if (parameter.CategoryParameter.Type == TradeNest.Models.ParameterType.Boolean)
+                @if (parameter.Type == TradeNest.Models.ParameterType.Boolean)
                 {
                     <div class="form-check">
                         <input type="hidden" name="parameterValues" value="false" />
-                        <input type="checkbox" name="parameterValues" value="true" class="form-check-input" @(parameter.Value == "true" ? "checked" : "") />
+                        <input type="checkbox" name="parameterValues" value="true"
+                               class="form-check-input"
+                               @(existingValue?.Value == "true" ? "checked" : "") />
                         <label class="form-check-label">Tak</label>
                     </div>
                 }

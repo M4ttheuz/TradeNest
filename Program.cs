@@ -55,8 +55,10 @@ using (IServiceScope scope = app.Services.CreateScope())
         context.SaveChanges();
     }
 
+
     if (!context.Categories.Any(c => c.Name == "Samochody Osobowe"))
     {
+        /*
         Category carCategory = new()
         {
             Name = "Samochody Osobowe",
@@ -73,6 +75,7 @@ using (IServiceScope scope = app.Services.CreateScope())
 
         context.Categories.Add(carCategory);
         context.SaveChanges();
+        */
     }
 }
 

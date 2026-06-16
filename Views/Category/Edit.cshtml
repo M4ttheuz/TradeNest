@@ -1,19 +1,25 @@
 ﻿@using TradeNest.Models
 
+@model Category
+
 @{
-    ViewData["Title"] = "Edytowanie kategorii";
+    ViewData["Title"] = "Edycja kategorii";
 }
 
 <div class="filter-panel">
 
     <h1 class="mb-4">Edycja kategorii</h1>
 
-    <form id="editCategoryForm" method="post">
-        <input type="hidden" id="categoryId" name="categoryId" value="" />
+    <form method="post">
+
+        <input type="hidden" name="id" value="@Model.Id" />
 
         <div class="filter-group">
             <label class="filter-label">Nazwa kategorii</label>
-            <input type="text" id="categoryName" name="categoryName" class="form-control form-control-dark" />
+            <input type="text"
+                   name="categoryName"
+                   value="@Model.Name"
+                   class="form-control form-control-dark" />
         </div>
 
         <hr />
@@ -21,16 +27,134 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="mb-0">Parametry</h3>
 
-            <button type="button" onclick="addParameter()" class="btn btn-primary-custom">
+            <button type="button"
+                    onclick="addParameter()"
+                    class="btn btn-primary-custom">
                 Dodaj parametr
             </button>
         </div>
 
-        <div id="parameters"></div>
+        <div id="parameters">
 
-        <button type="submit" class="btn btn-primary-custom w-100 mt-3">
+            @foreach (CategoryParameter parameter in Model.Parameters)
+            {
+                <div class="filter-group">
+
+                    <hr />
+
+                    <input type="hidden" name="parameterIds" value="@parameter.Id" />
+                    <input type="hidden" name="parameterTypes" value="@((int)parameter.Type)" />
+                    <input type="hidden" name="parameterRequired" value="false" />
+                    <input type="hidden" name="parameterRequired" value="@parameter.IsRequired.ToString().ToLower()" />
+
+                    <div class="filter-group">
+                        <label class="filter-label">Nazwa parametru</label>
+
+                        <input type="text"
+                               name="parameterNames"
+                               value="@parameter.Name"
+                               class="form-control form-control-dark" />
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">Typ</label>
+                        <input type="text"
+                               value="@parameter.Type"
+                               class="form-control form-control-dark"
+                               disabled />
+                    </div>
+
+                    <button type="button"
+                            onclick="removeParameter(this)"
+                            class="btn btn-primary-custom">
+                        Usuń parametr
+                    </button>
+
+                </div>
+            }
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary-custom w-100 mt-3">
             Zapisz zmiany
         </button>
 
     </form>
+
+    <form method="post"
+          asp-action="Delete"
+          asp-route-id="@Model.Id"
+          onsubmit="return confirm('Na pewno usunąć kategorię wraz ze wszystkimi ogłoszeniami?');">
+
+        <button type="submit"
+                class="btn btn-danger w-100 mt-3">
+            Usuń kategorię
+        </button>
+
+    </form>
+
 </div>
+
+<script>
+
+    function addParameter()
+    {
+        const container = document.getElementById("parameters");
+        const parameter = document.createElement("div");
+
+        parameter.classList.add("filter-group");
+
+        parameter.innerHTML = `
+            <hr />
+
+            <input type="hidden" name="parameterIds" value="0" />
+
+            <div class="filter-group">
+                <label class="filter-label">Nazwa parametru</label>
+
+                <input type="text"
+                       name="parameterNames"
+                       class="form-control form-control-dark" />
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Typ</label>
+
+                <select name="parameterTypes"
+                        class="form-select form-select-dark">
+                    <option value="0">Text</option>
+                    <option value="1">Number</option>
+                    <option value="2">Boolean</option>
+                    <option value="3">Date</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label d-block">Wymagany</label>
+
+                <input type="hidden"
+                       name="parameterRequired"
+                       value="false" />
+
+                <input type="checkbox"
+                       name="parameterRequired"
+                       value="true" />
+            </div>
+
+            <button type="button"
+                    onclick="removeParameter(this)"
+                    class="btn btn-primary-custom">
+                Usuń parametr
+            </button>
+        `;
+
+        container.appendChild(parameter);
+    }
+
+    function removeParameter(button)
+    {
+        button.parentElement.remove();
+    }
+
+</script>

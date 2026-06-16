@@ -54,6 +54,30 @@ namespace TradeNest.Data
                 .WithMany()
                 .HasForeignKey(r => r.ReporterId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CategoryParameter>()
+                .HasOne(x => x.Category)
+                .WithMany(x => x.Parameters)
+                .HasForeignKey(x => x.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Listing>()
+                .HasOne(x => x.Category)
+                .WithMany(x => x.Listings)
+                .HasForeignKey(x => x.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ListingParameterValue>()
+                .HasOne(x => x.Listing)
+                .WithMany(x => x.ParameterValues)
+                .HasForeignKey(x => x.ListingId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ListingParameterValue>()
+                .HasOne(x => x.CategoryParameter)
+                .WithMany(x => x.Values)
+                .HasForeignKey(x => x.CategoryParameterId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

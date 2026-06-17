@@ -40,6 +40,24 @@ namespace TradeNest.Controllers
                 .Take(8)
                 .ToList();
 
+
+            var userIdString = HttpContext.Session.GetString("userId");
+
+            List<int> savedListingIds = new();
+
+            if (!string.IsNullOrEmpty(userIdString))
+            {
+                int userId = int.Parse(userIdString);
+
+                savedListingIds = _context.Users
+                    .Where(u => u.Id == userId)
+                    .SelectMany(u => u.SavedListings)
+                    .Select(l => l.Id)
+                    .ToList();
+            }
+
+            ViewBag.SavedListingIds = savedListingIds;
+
             ViewBag.User = HttpContext.Session.GetString("user");
             ViewBag.UserId = HttpContext.Session.GetString("userId");
             ViewBag.Role = HttpContext.Session.GetString("role");

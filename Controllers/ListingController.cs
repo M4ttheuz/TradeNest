@@ -324,7 +324,26 @@ namespace TradeNest.Controllers
                 .Include(x => x.ParameterValues)
                     .ThenInclude(x => x.CategoryParameter)
                 .FirstOrDefault(x => x.Id == id && x.IsVisible && x.IsApproved);
-            if (listing == null) return NotFound();
+
+            if (listing == null)
+                return NotFound();
+
+            bool isSaved = false;
+
+            var userIdString = HttpContext.Session.GetString("userId");
+
+            if (!string.IsNullOrEmpty(userIdString))
+            {
+                int userId = int.Parse(userIdString);
+
+                isSaved = _context.Users
+                    .Include(u => u.SavedListings)
+                    .Any(u => u.Id == userId &&
+                              u.SavedListings.Any(l => l.Id == id));
+            }
+
+            ViewBag.IsSaved = isSaved;
+
             return View(listing);
         }
     }

@@ -28,6 +28,13 @@ namespace TradeNest.Models
         public int? ListingId { get; set; }
         public Listing? Listing { get; set; }
 
+        [Required(ErrorMessage = "Pole 'Co kupiono' jest wymagane.")]
+        public string WhatWasBought { get; set; } = null!;
+
+        [Required(ErrorMessage = "Wprowadź datę zakupu przedmiotu.")]
+        [DataType(DataType.Date)]
+        public DateTime PurchaseDate { get; set; }
+
         // Średnia ocena dla TEJ konkretnej opinii
         [NotMapped]
         public double AverageReviewRating => Math.Round((DescriptionRating + ResponseTimeRating + PolitenessRating) / 3.0, 2);

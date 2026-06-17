@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TradeNest.Data; 
-using TradeNest.ViewModels; 
+using TradeNest.ViewModels;
+using TradeNest.Models;
 
 namespace TradeNest.Controllers
 {
@@ -55,5 +56,58 @@ namespace TradeNest.Controllers
 
             return View(viewModel);
         }
+
+        [HttpGet]
+        public IActionResult CreateReview(int targetUserId, int? listingId)
+        {
+            var currentUserIdStr = HttpContext.Session.GetString("userId");
+
+            if (string.IsNullOrEmpty(currentUserIdStr))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (currentUserIdStr == targetUserId.ToString())
+            {
+                return RedirectToAction("UserRatings", new { id = targetUserId });
+            }
+
+            ViewBag.TargetUserId = targetUserId;
+            ViewBag.ListingId = listingId;
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReview(UserReview review)
+        {
+            var currentUserIdStr = HttpContext.Session.GetString("userId");
+
+            if (string.IsNullOrEmpty(currentUserIdStr) || !int.TryParse(currentUserIdStr, out int currentUserId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            review.AuthorId = currentUserId;
+            review.CreatedAt = DateTime.Now;
+
+            ModelState.Remove(nameof(review.Author));
+            ModelState.Remove(nameof(review.TargetUser));
+
+            if (ModelState.IsValid)
+            {
+                _context.UserReviews.Add(review);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("UserRatings", new { id = review.TargetUserId });
+            }
+
+            ViewBag.TargetUserId = review.TargetUserId;
+            ViewBag.ListingId = review.ListingId;
+
+            return View(review);
+        }
+
     }
 }

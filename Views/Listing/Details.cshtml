@@ -248,30 +248,28 @@
                 Sprzedający
             </h5>
 
-            <div class="d-flex align-items-center gap-3 mb-4">
+            <a asp-controller="User"
+               asp-action="UserRatings"
+               asp-route-id="@Model.OwnerId"
+               class="d-flex align-items-center gap-3 mb-4 text-decoration-none text-reset user-ratings-link">
 
                 <div class="category-icon">
                     <i class="bi bi-person"></i>
                 </div>
 
                 <div>
-
                     <div>
                         @Model.Owner.Login
                     </div>
-
                     <div class="text-muted">
                         ID użytkownika: @Model.OwnerId
                     </div>
-
                 </div>
 
-            </div>
-
-            <button class="btn btn-primary-custom w-100 mb-2"
-                    data-owner-id="@Model.OwnerId"
-                    data-owner-login="@Model.Owner.Login"
-                    onclick="openChatWithUser(this)">
+            </a> <button class="btn btn-primary-custom w-100 mb-2"
+                         data-owner-id="@Model.OwnerId"
+                         data-owner-login="@Model.Owner.Login"
+                         onclick="openChatWithUser(this)">
                 Napisz wiadomość
             </button>
 

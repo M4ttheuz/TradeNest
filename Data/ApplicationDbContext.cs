@@ -42,8 +42,8 @@ namespace TradeNest.Data
                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserReview>()
-                .HasIndex(r => new { r.AuthorId, r.TargetUserId })
-                .IsUnique();
+                .HasIndex(r => new { r.AuthorId, r.TargetUserId });
+                
 
             modelBuilder.Entity<ListingReport>()
                 .HasOne(r => r.Listing)

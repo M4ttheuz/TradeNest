@@ -1,0 +1,121 @@
+﻿@model TradeNest.Models.UserReview
+
+@{
+    ViewData["Title"] = "Wystaw opinię";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-4 shadow-sm bg-dark text-light border-0" style="border-radius: 12px;">
+
+                <div class="text-center mb-4">
+                    <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center p-3 mb-2">
+                        <i class="bi bi-chat-left-heart text-warning display-4"></i>
+                    </div>
+                    <h2 class="mt-2 fw-bold">Wystaw opinię użytkownikowi</h2>
+                    <p class="text-secondary">Twoja opinia pomaga budować bezpieczną społeczność TradeNest</p>
+                </div>
+
+                <hr class="border-secondary mb-4" />
+
+                <form asp-controller="User" asp-action="CreateReview" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <input type="hidden" asp-for="TargetUserId" value="@ViewBag.TargetUserId" />
+                    @if (ViewBag.ListingId != null)
+                    {
+                        <input type="hidden" asp-for="ListingId" value="@ViewBag.ListingId" />
+                    }
+
+                    <div class="mb-4 bg-black bg-opacity-25 p-3 rounded" style="border-radius: 8px;">
+                        <label class="form-label d-block fw-bold mb-2">
+                            <i class="bi bi-card-text text-warning me-2"></i>Zgodność z opisem
+                        </label>
+                        <div class="d-flex justify-content-between px-3 py-2">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <div class="form-check form-check-inline text-center m-0">
+                                    <input class="form-check-input d-block mx-auto mb-1" type="radio" asp-for="DescriptionRating" value="@i" id="desc_@i" required />
+                                    <label class="form-check-label small text-secondary" for="desc_@i">@i</label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="DescriptionRating" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="mb-4 bg-black bg-opacity-25 p-3 rounded" style="border-radius: 8px;">
+                        <label class="form-label d-block fw-bold mb-2">
+                            <i class="bi bi-clock text-warning me-2"></i>Czas odpowiedzi
+                        </label>
+                        <div class="d-flex justify-content-between px-3 py-2">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <div class="form-check form-check-inline text-center m-0">
+                                    <input class="form-check-input d-block mx-auto mb-1" type="radio" asp-for="ResponseTimeRating" value="@i" id="resp_@i" required />
+                                    <label class="form-check-label small text-secondary" for="resp_@i">@i</label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="ResponseTimeRating" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="mb-4 bg-black bg-opacity-25 p-3 rounded" style="border-radius: 8px;">
+                        <label class="form-label d-block fw-bold mb-2">
+                            <i class="bi bi-emoji-smile text-warning me-2"></i>Uprzejmość sprzedającego
+                        </label>
+                        <div class="d-flex justify-content-between px-3 py-2">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <div class="form-check form-check-inline text-center m-0">
+                                    <input class="form-check-input d-block mx-auto mb-1" type="radio" asp-for="PolitenessRating" value="@i" id="pol_@i" required />
+                                    <label class="form-check-label small text-secondary" for="pol_@i">@i</label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="PolitenessRating" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="WhatWasBought" class="form-label fw-bold mb-2">
+                            <i class="bi bi-cart-check text-warning me-2"></i>Co kupiłeś?
+                        </label>
+                        <input asp-for="WhatWasBought" class="form-control bg-secondary bg-opacity-25 text-light border-secondary"
+                               style="border-radius: 8px;" placeholder="np. Rower górski Kross, iPhone 13..." required />
+                        <span asp-validation-for="WhatWasBought" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="PurchaseDate" class="form-label fw-bold mb-2">
+                            <i class="bi bi-calendar-event text-warning me-2"></i>Data zakupu
+                        </label>
+                        <input asp-for="PurchaseDate" type="date" class="form-control bg-secondary bg-opacity-25 text-light border-secondary"
+                               style="border-radius: 8px;" required />
+                        <span asp-validation-for="PurchaseDate" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Comment" class="form-label fw-bold mb-2">
+                            <i class="bi bi-pencil-square text-warning me-2"></i>Treść opinii
+                        </label>
+                        <textarea asp-for="Comment" class="form-control bg-secondary bg-opacity-25 text-light border-secondary"
+                                  rows="4" style="border-radius: 8px;" placeholder="Napisz coś więcej o przebiegu transakcji i zakupionym przedmiocie..." required></textarea>
+                        <span asp-validation-for="Comment" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <a href="javascript:history.back()" class="btn btn-outline-secondary px-4" style="border-radius: 8px;">Anuluj</a>
+                        <button type="submit" class="btn btn-warning px-5 fw-bold text-dark" style="border-radius: 8px;">Dodaj opinię</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

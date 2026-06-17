@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TradeNest.Data;
 
@@ -10,9 +11,11 @@ using TradeNest.Data;
 namespace TradeNest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260617225649_AddPurchaseDetailsToReview")]
+    partial class AddPurchaseDetailsToReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.27");
@@ -332,7 +335,8 @@ namespace TradeNest.Migrations
 
                     b.HasIndex("TargetUserId");
 
-                    b.HasIndex("AuthorId", "TargetUserId");
+                    b.HasIndex("AuthorId", "TargetUserId")
+                        .IsUnique();
 
                     b.ToTable("UserReviews");
                 });

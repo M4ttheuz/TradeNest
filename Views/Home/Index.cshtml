@@ -195,12 +195,19 @@
     </div>
 }
 
+
 <div class="row">
     <div class="col-12">
         <h4 class="section-title">Najnowsze ogłoszenia</h4>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+
+            @{
+                var savedListingIds = ViewBag.SavedListingIds as List<int> ?? new List<int>();
+            }
+
             @foreach (TradeNest.Models.Listing listing in Model)
             {
+                bool isSaved = savedListingIds.Contains(listing.Id);
                 var isPromoted = listing.IsPromoted && listing.PromotionEndDate > DateTime.Now;
 
                 var prices = listing.Prices.OrderByDescending(x => x.SetAt).ToList();
@@ -237,7 +244,14 @@
                                 <form asp-controller="Watchlist" asp-action="Toggle" method="post">
                                     <input type="hidden" name="listingId" value="@listing.Id" />
                                     <button type="submit" class="watchlist-btn">
-                                        <i class="bi bi-heart"></i>
+                                        @if (isSaved)
+                                        {
+                                            <i class="bi bi-heart-fill"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-heart"></i>
+                                        }
                                     </button>
                                 </form>
                             </div>

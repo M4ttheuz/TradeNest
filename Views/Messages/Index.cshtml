@@ -1,0 +1,323 @@
+﻿@model IEnumerable<TradeNest.Controllers.MessagesController.ChatConversationViewModel>
+
+@{
+    ViewData["Title"] = "Moje Wiadomości";
+}
+
+<div class="container mt-4">
+    <div class="row chat-page-container">
+
+        <div class="col-md-4 conversation-sidebar">
+            <h5 class="p-3 border-bottom m-0 font-weight-bold">Konwersacje</h5>
+            <div class="list-group list-group-flush conversation-list">
+                @if (!Model.Any())
+                {
+                    <div class="p-3 text-muted text-center">Nie masz jeszcze żadnych wiadomości.</div>
+                }
+                else
+                {
+                    foreach (var chat in Model)
+                    {
+                        <button class="list-group-item list-group-item-action conversation-item"
+                                data-user-id="@chat.UserId"
+                                data-user-login="@chat.UserLogin"
+                                onclick="selectConversation(this)">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <strong class="mb-1 text-primary">@@@chat.UserLogin</strong>
+                                <small class="text-muted">@chat.SentAt.ToLocalTime().ToString("dd/MM HH:mm")</small>
+                            </div>
+                            <p class="mb-1 text-truncate text-muted small">@chat.LastMessage</p>
+                        </button>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="col-md-8 chat-area">
+            <div id="chat-placeholder" class="text-center p-5">
+                <i class="bi bi-chat-dots" style="font-size: 3rem; color: #ccc;"></i>
+                <p class="text-muted mt-2">Wybierz użytkownika z listy po lewej, aby rozpocząć rozmowę.</p>
+            </div>
+
+            <div id="main-chat-window" class="d-none">
+                <div class="chat-header-main">
+                    <div>
+                        <span class="small-title">Rozmowa z:</span>
+                        <h4 id="chat-target-user">---</h4>
+                    </div>
+                </div>
+
+                <div class="chat-body-main" id="chat-messages-container">
+                </div>
+
+                <div class="chat-footer-main align-content-center justify-content-center">
+                    <input type="hidden" id="chat-target-id" value="" />
+                    <input type="text" id="chat-input" placeholder="Wpisz wiadomość..." onkeypress="handleKeyPress(event)" />
+                    <button id="send-btn" onclick="submitMessage()"><i class="bi bi-arrow-right-short"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Główny kontener strony czatu */
+    .chat-page-container {
+        background-color: var(--surface-color);
+        border: 1px solid #333;
+        border-radius: 8px;
+        overflow: hidden;
+        height: 600px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Lewa kolumna: Lista rozmówców */
+    .conversation-sidebar {
+        border-right: 1px solid #333;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--surface-color);
+    }
+
+        .conversation-sidebar h5 {
+            color: var(--text-primary);
+            border-bottom: 1px solid #333 !important;
+        }
+
+    .conversation-list {
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    .conversation-item {
+        background-color: transparent !important;
+        border-bottom: 1px solid #333 !important;
+        padding: 15px;
+        color: var(--text-primary) !important;
+        transition: background-color 0.2s ease;
+    }
+
+        .conversation-item:hover {
+            background-color: #222 !important;
+        }
+
+        .conversation-item.active {
+            background-color: #2a2a2a !important;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .conversation-item strong {
+            color: var(--text-primary) !important;
+        }
+
+        .conversation-item small, .conversation-item p {
+            color: var(--text-secondary) !important;
+        }
+
+    .chat-area {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #1a1a1a;
+        padding: 0;
+    }
+
+    #main-chat-window {
+        display: flex !important;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    #chat-placeholder p {
+        color: var(--text-secondary);
+    }
+
+    .chat-header-main {
+        background-color: var(--surface-color);
+        color: var(--text-primary);
+        padding: 15px;
+        border-bottom: 1px solid #333;
+    }
+
+        .chat-header-main h4 {
+            margin: 0;
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+
+    .small-title {
+        font-size: 11px;
+        display: block;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+    }
+
+    .chat-body-main {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background-color: #151515;
+    }
+
+    .msg-bubble {
+        padding: 10px 15px;
+        border-radius: 16px;
+        max-width: 70%;
+        font-size: 14px;
+        line-height: 1.4;
+        word-wrap: break-word;
+    }
+        .msg-bubble.me {
+            background-color: var(--primary-color);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg-bubble.other {
+            background-color: var(--surface-color);
+            color: var(--text-primary);
+            border: 1px solid #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+    .msg-system {
+        font-size: 12px;
+        color: var(--text-secondary);
+        text-align: center;
+        margin: 5px 0;
+        align-self: center;
+    }
+
+    .chat-footer-main {
+        display: flex;
+        padding: 15px;
+        border-top: 1px solid #333;
+        background-color: var(--surface-color);
+    }
+
+    #chat-input {
+        flex: 1;
+        background-color: #222;
+        color: var(--text-primary);
+        border: 1px solid #444;
+        border-radius: 20px;
+        padding: 10px 20px;
+        outline: none;
+    }
+
+        #chat-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+    #send-btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        margin-left: 10px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+        #send-btn:hover {
+            opacity: 0.9;
+        }
+</style>
+
+<script>
+    function selectConversation(element) {
+        document.querySelectorAll('.conversation-item').forEach(item => item.classList.remove('active'));
+        element.classList.add('active');
+
+        const userId = element.getAttribute('data-user-id');
+        const userLogin = element.getAttribute('data-user-login');
+
+        document.getElementById('chat-placeholder').classList.add('d-none');
+        document.getElementById('main-chat-window').classList.remove('d-none');
+
+        document.getElementById('chat-target-user').innerText = userLogin;
+        document.getElementById('chat-target-id').value = userId;
+
+        loadChatHistory(userId);
+    }
+
+    function loadChatHistory(withUserId) {
+        const container = document.getElementById('chat-messages-container');
+        container.innerHTML = '<div class="msg-system">Ładowanie rozmowy...</div>';
+
+        fetch(`/Messages/GetChatHistory?withUserId=${withUserId}`)
+            .then(response => {
+                if (!response.ok) throw new Error();
+                return response.json();
+            })
+            .then(messages => {
+                container.innerHTML = '';
+                if (messages.length === 0) {
+                    container.innerHTML = '<div class="msg-system">Brak wiadomości. Napisz coś pierwszy!</div>';
+                    return;
+                }
+                messages.forEach(msg => appendMessageHtml(msg.content, msg.isMe));
+                scrollToBottom();
+            })
+            .catch(() => {
+                container.innerHTML = '<div class="msg-system style="color:red;">Błąd ładowania czatu.</div>';
+            });
+    }
+
+    function submitMessage() {
+        const input = document.getElementById('chat-input');
+        const receiverId = document.getElementById('chat-target-id').value;
+        const content = input.value.trim();
+
+        if (!content || !receiverId) return;
+        input.disabled = true;
+
+        const params = new URLSearchParams();
+        params.append('receiverId', receiverId);
+        params.append('content', content);
+
+        fetch('/Messages/SendMessage', { method: 'POST', body: params })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const systemMsg = document.querySelector('.msg-system');
+                if (systemMsg) systemMsg.remove();
+
+                appendMessageHtml(data.content, true);
+                input.value = '';
+                scrollToBottom();
+
+                const activeItem = document.querySelector('.conversation-item.active p');
+                if(activeItem) activeItem.innerText = data.content;
+            }
+            input.disabled = false;
+            input.focus();
+        });
+    }
+
+    function appendMessageHtml(text, isMe) {
+        const container = document.getElementById('chat-messages-container');
+        const bubble = document.createElement('div');
+        bubble.className = `msg-bubble ${isMe ? 'me' : 'other'}`;
+        bubble.innerText = text;
+        container.appendChild(bubble);
+    }
+
+    function scrollToBottom() {
+        const container = document.getElementById('chat-messages-container');
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') submitMessage();
+    }
+</script>

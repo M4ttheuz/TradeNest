@@ -120,19 +120,15 @@
                         {
                            <button class="icon-btn text-white" title="Mój Profil"> </button>
                         }
-                        <button class="icon-btn text-white" title="Wiadomości">
-                            <i class="bi bi-chat-dots"></i>
-                        </button>
-                        <button class="icon-btn text-white" title="Powiadomienia">
-                            <i class="bi bi-bell"></i>
-                            <span class="badge rounded-pill badge-notification">3</span>
-                        </button>
+                        <a class="icon-btn text-white" asp-area="" asp-controller="Messages" asp-action="Index">
+                                <i class="bi bi-chat-dots"></i>
+                        </a>
                         @* <button class="icon-btn" title="Obserwowane">
                             <i class="bi bi-heart"></i>
                         </button> *@
                         <a asp-controller="Watchlist" asp-action="Index" class="icon-btn" title="Obserwowane">
                             <i class="bi bi-heart"></i>
-                        </button>
+                        </a>
                         @if (!string.IsNullOrEmpty(login))
                         {
                             <div class="user-dropdown d-inline-block">

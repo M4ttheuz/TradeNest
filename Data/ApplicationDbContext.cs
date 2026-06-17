@@ -15,6 +15,8 @@ namespace TradeNest.Data
         public DbSet<ListingParameterValue> ListingParameterValues { get; set; }
         public DbSet<ListingImage> ListingImages { get; set; }
         public DbSet<UserReview> UserReviews { get; set; }
+        public DbSet<ListingReport> ListingReports { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

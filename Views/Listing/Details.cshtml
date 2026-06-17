@@ -244,7 +244,10 @@
 
             </div>
 
-            <button class="btn btn-primary-custom w-100 mb-2">
+            <button class="btn btn-primary-custom w-100 mb-2"
+                    data-owner-id="@Model.OwnerId"
+                    data-owner-login="@Model.Owner.Login"
+                    onclick="openChatWithUser(this)">
                 Napisz wiadomość
             </button>
 

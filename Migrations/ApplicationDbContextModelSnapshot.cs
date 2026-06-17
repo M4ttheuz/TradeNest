@@ -212,7 +212,35 @@ namespace TradeNest.Migrations
 
                     b.HasIndex("ReporterId");
 
-                    b.ToTable("ListingReport");
+                    b.ToTable("ListingReports");
+                });
+
+            modelBuilder.Entity("TradeNest.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("TradeNest.Models.User", b =>
@@ -395,6 +423,25 @@ namespace TradeNest.Migrations
                     b.Navigation("Listing");
 
                     b.Navigation("Reporter");
+                });
+
+            modelBuilder.Entity("TradeNest.Models.Message", b =>
+                {
+                    b.HasOne("TradeNest.Models.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TradeNest.Models.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("TradeNest.Models.UserReview", b =>
